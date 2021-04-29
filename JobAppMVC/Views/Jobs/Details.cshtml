@@ -1,0 +1,84 @@
+﻿@model JobApp.Models.JobModel.Job
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+<div>
+    <div class="row">
+        <h1>@Html.DisplayFor(model => model.Title)</h1>
+        <div class="col-sm-6">
+            <h6>@Html.DisplayFor(model => model.TitleAlt)  </h6>
+            <h6>@Html.DisplayFor(model => model.TitleAlt2)</h6>
+        </div>
+        <div class="col-sm-6">
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+                <a asp-action="Index">Back to List</a>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+    <div class="row">
+        <div class="col-sm-6 border-right">
+            <div class="row">
+                <div class="col-sm-5">
+                    <h5>Job Info</h5>
+                </div>
+                <div class="col-sm-5">
+                    <a asp-controller="JobDatas" asp-action="Create" asp-route-id="@Model.Id">Add JobInfo</a>
+                </div>
+            </div>
+            @foreach (var item in Model.JobData.OrderByDescending(a => a.Nation))
+            {
+                <h6>@item.Nation | @item.Region</h6>
+                <dl>
+                    <dt class="col-sm-2">
+                        @item.DescriptionShort
+                    </dt>
+                    <dd class="col-sm-10">
+                        @item.DescriptionLong
+                    </dd>
+                    <dt class="col-sm-2">
+                        Salary
+                    </dt>
+                    <dd class="col-sm-10">
+                        Min: @item.MinSalary | Max: @item.MaxSalary
+                    </dd>
+                    <dd>
+                    </dd>
+                </dl>
+                <br />
+            }
+        </div>
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-5">
+                    <h5>Skills</h5>
+                </div>
+                <div class="col-sm-5">
+                    <a asp-controller="JobSkills" asp-action="Create" asp-route-id="@Model.Id">Add Skill</a>
+                </div>
+            </div>
+            @foreach (var item in Model.JobSkillz)
+            {
+
+                <dl>
+                    <dt class="col-sm-6">
+                        @item.Name
+                    </dt>
+                    <dd class="col-sm-12">
+                        @item.Content
+                    </dd>
+
+                    <dd>
+                        <a asp-controller="JobSkills" asp-action="Edit" asp-route-id="@item.Id">Edit Skill</a>
+                    </dd>
+                </dl>
+                <br />
+            }
+        </div>
+    </div>
+</div>

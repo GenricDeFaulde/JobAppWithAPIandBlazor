@@ -1,0 +1,73 @@
+﻿@model JobApp.Models.JobModel.JobOffer
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>JobOffer</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Arbeitgeber:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CompanyBranch.Company.CompanyName)
+        </dd>
+        <dt class="col-sm-2">
+            HeadHunter:
+        </dt>
+        <dd class="col-sm-10">
+            <a asp-action="Headhunters" asp-route-id="Details">
+                @Html.DisplayFor(model => model.HeadHunter.FirstName)&nbsp;@Html.DisplayFor(model =>
+                                                                              model.HeadHunter.LastName)
+            </a>
+        </dd>
+        <dt class="col-sm-2">
+            JobPortal:
+        </dt>
+        <dd class="col-sm-10">
+            <a asp-action="Details" asp-route-id="JobOffers">
+                @Html.DisplayFor(model => model.JobExchange.Name)
+            </a>
+        </dd>
+        <dt class="col-sm-2">
+            Bewerbung
+        </dt>
+        <dd class="col-sm-10">
+            <a asp-action="Applications" asp-route-id="Details">
+                @Html.DisplayFor(model => model.ApplicationnId)
+            </a>
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SalaryOffered)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SalaryOffered)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsActive)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsActive)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Releasedate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Releasedate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.JobOfferUrl)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.JobOfferUrl)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,81 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using JobApp.Areas.Identity.Data
+@inject SignInManager<JobAppUser> SignInManager
+@inject UserManager<JobAppUser> UserManager
+@{
+    ViewBag.MasterName = (User.Identity.Name == "genric.defaulde@gmail.com") ? "Master" : User.Identity.Name;
+    if (User.Identity.Name == "kempski@alv.de") { ViewBag.MasterName = "Frau Kempski"; }
+
+}
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    @if (User.IsInRole("Basic"))
+    {
+        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Jobsuche">Jobsuche</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-danger" asp-area="" asp-controller="JobOffers"
+                        asp-action="Index">JobAngebote</a>
+                </li>
+                <li class="nav-item">
+
+                </li>
+            </ul>
+        </div>
+        <div class="mx-auto order-0">
+            <a class="navbar-brand mx-auto mb-0 text-nowrap" href="/">Hallo
+                @* @UserManager.GetUserAsync(User).Result.UserName *@
+                @ViewBag.MasterName
+                !</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    }
+    else
+    {
+        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                </li>
+                <li class="nav-item">
+                </li>
+                <li class="nav-item">
+
+                </li>
+            </ul>
+        </div>
+        <div class="mx-auto order-0">
+            <a class="navbar-brand mx-auto mb-0 text-nowrap" href="/">Bitte einloggen!</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    }
+    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        <ul class="navbar-nav ml-auto">
+            @if (User.IsInRole("Basic"))
+            {
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Jobs" asp-action="Index">Jobs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Companies" asp-action="Index">Arbeitgeber</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Index">Profil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="JobExchanges" asp-action="Index">Portale</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="HeadHunters" asp-action="Index">Hunter</a>
+                </li>
+            }
+        </ul>
+    </div>
+</nav>

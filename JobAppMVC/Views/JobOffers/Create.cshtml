@@ -1,0 +1,98 @@
+﻿@model JobApp.Models.JobModel.JobOffer
+
+@{
+    ViewData["Title"] = "Create";
+}
+@* TODO make mor ein line with other pages *@
+
+<h1>Create</h1>
+
+<h4>JobOffer</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group">
+                <label asp-for="JobId" class="control-label">Bezeichnung</label>
+                <select data-val="true" id="JobId" name="JobId">
+                        @foreach(var item in Model.JobsList)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                        <option value="" selected="selected">--</option>
+                      </select>
+                <span asp-validation-for="JobId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CompanyBranchId" class="control-label">Arbeitgeber</label>
+                <select data-val="true" id="CompanyBranchId" name="CompanyBranchId">
+                @foreach(var item in Model.CompanyBranchesList)
+                        {
+                            <option value="@item.Value ">@item.Text</option>
+                        }
+                        <option value="" selected="selected">--</option>
+                      </select>
+                <span asp-validation-for="CompanyBranchId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HeadHunterId" class="control-label">Headhunter</label>
+                <select data-val="true" id="HeadHunterId" name="HeadHunterId">
+                @foreach(var item in Model.HeadHuntersList)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                        <option value="" selected="selected">--</option>
+                      </select>
+                <span asp-validation-for="HeadHunterId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="JobExchangeId" class="control-label">Job Portal</label>
+                <select data-val="true" id="JobExchangeId" name="JobExchangeId">
+                @foreach(var item in Model.JobExchangesList)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                        <option value="" selected="selected">--</option>
+                      </select>
+                <span asp-validation-for="JobExchangeId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SalaryOffered" class="control-label">Lohnangabe</label>
+                <input asp-for="SalaryOffered" class="form-control" />
+                <span asp-validation-for="SalaryOffered" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Releasedate" class="control-label"></label>
+                <input asp-for="Releasedate" class="form-control" />
+                <span asp-validation-for="Releasedate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="JobOfferUrl" class="control-label"></label>
+                <input asp-for="JobOfferUrl" class="form-control" />
+                <span asp-validation-for="JobOfferUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

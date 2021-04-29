@@ -1,0 +1,83 @@
+﻿@model JobApp.Models.UserModel.UserEducation
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>UserEducation</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <input asp-for="UserId" class="form-control" />
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Facility" class="control-label"></label>
+                <input asp-for="Facility" class="form-control" />
+                <span asp-validation-for="Facility" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AddressNation" class="control-label"></label>
+                <input asp-for="AddressNation" class="form-control" />
+                <span asp-validation-for="AddressNation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FacilityAddressCity" class="control-label"></label>
+                <input asp-for="FacilityAddressCity" class="form-control" />
+                <span asp-validation-for="FacilityAddressCity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FacilityAddressStreet" class="control-label"></label>
+                <input asp-for="FacilityAddressStreet" class="form-control" />
+                <span asp-validation-for="FacilityAddressStreet" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FacilityAddressState" class="control-label"></label>
+                <input asp-for="FacilityAddressState" class="form-control" />
+                <span asp-validation-for="FacilityAddressState" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Graduation" class="control-label"></label>
+                <input asp-for="Graduation" class="form-control" />
+                <span asp-validation-for="Graduation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TestimonyUrl" class="control-label"></label>
+                <input asp-for="TestimonyUrl" class="form-control" />
+                <span asp-validation-for="TestimonyUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

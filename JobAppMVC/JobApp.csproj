@@ -1,0 +1,57 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>aspnet-JobApp-F23FA266-BF26-4A88-94B3-BBAE47925982</UserSecretsId>
+    <StartupObject>JobApp.Program</StartupObject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\00000000000000_CreateIdentitySchema.cs" />
+    <Compile Remove="Data\Migrations\00000000000000_CreateIdentitySchema.Designer.cs" />
+    <Compile Remove="Migrations\20201124204558_InitialCreate.cs" />
+    <Compile Remove="Migrations\20201124204558_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20201124205248_UpdateDecimals.cs" />
+    <Compile Remove="Migrations\20201124205248_UpdateDecimals.Designer.cs" />
+    <Compile Remove="Migrations\20201124210135_UpdateDecimals2.cs" />
+    <Compile Remove="Migrations\20201124210135_UpdateDecimals2.Designer.cs" />
+    <Compile Remove="Migrations\JobDb\20201125121323_ALVadded.cs" />
+    <Compile Remove="Migrations\JobDb\20201125121323_ALVadded.Designer.cs" />
+    <Compile Remove="Migrations\JobDb\20201125182948_InitialCreate2.cs" />
+    <Compile Remove="Migrations\JobDb\20201125182948_InitialCreate2.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IdentityModel.AspNetCore" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.10" />
+    <PackageReference Include="Microsoft.Composition" Version="1.0.31" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.10" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="System.Composition" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+                      
+  <ItemGroup>
+    <Folder Include="Enums\" />
+    <Folder Include="Data\Enums\" />
+    <Folder Include="Data\Entities\" />
+    <Folder Include="Data\Migrations\" />
+    <Folder Include="Data\Structs\" />
+    <Folder Include="Models\CompanyModel\" />
+    <Folder Include="Models\HeadHunterModel\" />
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,68 @@
+﻿@model IEnumerable<JobApp.Models.CompanyModel.CompanyBranch>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="row">
+    <div class="col-lg ">
+        <h1 class="d-inline">@Model.First().Company.CompanyName</h1>
+        <p class="d-inline">&nbsp; &nbsp;Abteilungen und Zweigstellen</p>
+    </div>
+    <div class="col-lg-3 mt-auto text-right">
+        <p class="mt-auto mb-0">
+            <a class="text-muted text-right" asp-action="Create" asp-route-id="@Model.First().CompanyId">Neue
+                Zweigstelle</a>
+        </p>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover table-sm table-dark">
+        <thead class="">
+            <tr>
+                <th>
+                    Art
+                </th>
+                <th>
+                    Beschreibung
+                </th>
+                <th>
+                    Land
+                </th>
+                <th>
+                    Anschrift
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td width="7%">
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    @* TODO Make clickable to reveal overflow *@
+                    <td width="40%">
+                        <div class="overflow-auto">
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </div>
+                    </td>
+                    <td width="3%">
+                        @Html.DisplayFor(modelItem => item.AddressNation)
+                    </td>
+                    <td width="43%">
+                        @Html.DisplayFor(modelItem => item.AddressState) &nbsp;
+                        @Html.DisplayFor(modelItem => item.AddressStreet)
+                        &nbsp; -
+                        &nbsp; 
+                        @Html.DisplayFor(modelItem => item.AddressCity)
+                    </td>
+                    <td class="text-right" width="7%">
+                        <a class="text-light fa fa-info" asp-action="Details" asp-route-id="@item.Id"></a> |
+                        <a class="text-light fa fa-trash" asp-action="Delete" asp-route-id="@item.Id"></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

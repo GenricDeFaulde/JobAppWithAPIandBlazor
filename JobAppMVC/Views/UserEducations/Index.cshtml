@@ -1,0 +1,95 @@
+﻿@model IEnumerable<JobApp.Models.UserModel.UserEducation>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Facility)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddressNation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FacilityAddressCity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FacilityAddressStreet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FacilityAddressState)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Graduation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TestimonyUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Facility)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AddressNation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FacilityAddressCity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FacilityAddressStreet)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FacilityAddressState)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Graduation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TestimonyUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
