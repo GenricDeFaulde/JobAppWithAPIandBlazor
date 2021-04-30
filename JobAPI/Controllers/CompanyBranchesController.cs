@@ -45,7 +45,7 @@ namespace JobAPI.Controllers
                               .Include(i => i.Offers)
                               .ToListAsync();
 
-            if (companyBranch.Count() == 0)
+            if (companyBranch.Count == 0)
             {
                 return RedirectToAction("Create", new { id });
             }
