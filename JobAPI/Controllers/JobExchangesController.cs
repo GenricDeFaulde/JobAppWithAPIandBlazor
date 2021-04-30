@@ -25,11 +25,37 @@ namespace JobAPI.Controllers
                 _context = context;
             }
 
+        // GET: JobExchanges/
+        [Authorize]
+        [HttpGet]
+        [SwaggerOperation("GetJobExchanges")]
+        [SwaggerResponse((int)HttpStatusCode.OK)]
+        [SwaggerResponse((int)HttpStatusCode.NotFound)]
+        public async Task<ActionResult<JobExchange>> GetExchanges()
+        {
+
+            var jobExchange = await _context.JobExchangesDB
+                              .Include(i => i.Offers)
+                                  .ThenInclude(l => l.CompanyBranch)
+                              .Include(i => i.Offers)
+                                  .ThenInclude(l => l.CompanyBranch)
+                                      .ThenInclude(o => o.Company)
+                              .Include(i => i.Offers)
+                                  .ThenInclude(l => l.Job)
+                              .Include(i => i.Offers)
+                                  .ThenInclude(l => l.Application)
+                              .ToListAsync();
+            if (jobExchange == null)
+            {
+                return NotFound();
+            }
+
+            return new JsonResult(jobExchange);
+        }
 
 
-
-            // GET: JobExchanges/Details/5
-            [Authorize]
+        // GET: JobExchanges/Details/5
+        [Authorize]
             [HttpGet("{id}")]
             [SwaggerOperation("GetJobExchange")]
             [SwaggerResponse((int)HttpStatusCode.OK)]
