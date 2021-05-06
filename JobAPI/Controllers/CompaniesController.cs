@@ -19,7 +19,7 @@ namespace JobAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Produces("application/json")]
-    //[Authorize]
+    [Authorize]
     public class CompaniesController : ControllerBase
     {
         private readonly JobDbContext _context;
@@ -32,7 +32,7 @@ namespace JobAPI.Controllers
         }
 
         // GET: Companies/Details/
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         [SwaggerOperation("GetCompany")]
         [SwaggerResponse((int)HttpStatusCode.OK)]

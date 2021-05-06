@@ -113,7 +113,7 @@ namespace JobAPI.Controllers
         }
 
 
-        // POST: ApplicationBodies/Delete/5
+        // DELETE: ApplicationBodies/Delete/5
         [Authorize(Roles = "SuperAdmin")]
         [HttpDelete("{id}")]
         [SwaggerOperation("DeleteApplicationBody")]
