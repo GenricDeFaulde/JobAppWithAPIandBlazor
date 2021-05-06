@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace JobAPI.Data
+namespace JobAPI.Areas.Identity.Data
 {
     // TODO Add profile data for application users by adding properties to the JobAppUser class
     public class JobAppUser : IdentityUser

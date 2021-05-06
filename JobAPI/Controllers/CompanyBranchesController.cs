@@ -28,29 +28,24 @@ namespace JobAPI.Controllers
 
         // GET: CompanyBranches
         //[Authorize]
-        [HttpGet("GetCompanyBranches/{id}")]
+        [HttpGet("GetCompanyBranches")]
         [SwaggerOperation("GetCompanyBranchesByCompanyId")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<List<CompanyBranch>>> Index(int? id)
+        public async Task<ActionResult<List<CompanyBranch>>> Index()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
             var companyBranch = await _context.CompanyBranchDB
-                              .Where(m => m.CompanyId == id)
                               .Include(i => i.Company)
                               .Include(i => i.Offers)
                               .ToListAsync();
 
             if (companyBranch.Count == 0)
             {
-                return RedirectToAction("Create", new { id });
+                return NotFound();
             }
 
-            return companyBranch;
+            return new JsonResult(companyBranch);
         }
 
 

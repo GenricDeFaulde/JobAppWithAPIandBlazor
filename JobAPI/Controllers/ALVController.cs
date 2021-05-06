@@ -46,10 +46,10 @@ namespace JobAPI.Controllers
                 .FirstOrDefault(m => m.Id == id);
             if (jobsuche == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
-            return jobsuche;
+            return new JsonResult(jobsuche);
         }
 
         // POST: ALV/Create

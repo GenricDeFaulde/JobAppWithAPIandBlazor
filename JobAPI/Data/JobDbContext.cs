@@ -140,7 +140,7 @@ namespace JobAPI.Data
         /// <summary>
         /// Default connection string
         /// </summary>
-        public static string ConnectionString { get; set; } = @"Data Source=BIGDEFAULDE;Initial Catalog=JobApp;Integrated Security=True";
+        //public static string ConnectionString { get; set; } = @"Data Source=BIGDEFAULDE;Initial Catalog=JobApp;Integrated Security=True";
 
         /// <inheritdoc />
         public JobDbContext(DbContextOptions<JobDbContext> options) : base(options)

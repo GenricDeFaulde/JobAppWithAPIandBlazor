@@ -1,4 +1,5 @@
-﻿using JobAPI.Data;
+﻿using JobAPI.Areas.Identity.Data;
+using JobAPI.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -12,14 +13,14 @@ using System.Threading.Tasks;
 
 namespace JobAPI.Controllers
 {
-    public class TokenController : Controller
+    public class _TokenController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<JobAppUser> _userManager;
 
 
 
-        public TokenController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public _TokenController(ApplicationDbContext context, UserManager<JobAppUser> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -27,7 +28,7 @@ namespace JobAPI.Controllers
 
 
 
-        [Route("/token")]
+        [Route("/_token")]
         [HttpPost]
         public async Task<IActionResult> Create(string username,string password, string grant_type)
         {
@@ -45,7 +46,7 @@ namespace JobAPI.Controllers
 
         private async Task<bool> IsValidUsernameAndPassword(string username, string password)
         {
-            var user = await _userManager.FindByEmailAsync(username);
+            var user = await _userManager.FindByNameAsync(username);
             return await _userManager.CheckPasswordAsync(user, password);
         }
 
@@ -53,7 +54,7 @@ namespace JobAPI.Controllers
 
         private async Task<dynamic> GenerateToken(string username)
         {
-            var user = await _userManager.FindByEmailAsync(username);
+            var user = await _userManager.FindByNameAsync(username);
             var roles = from ur in _context.UserRoles
                         join r in _context.Roles on ur.RoleId equals r.Id
                         where ur.UserId == user.Id

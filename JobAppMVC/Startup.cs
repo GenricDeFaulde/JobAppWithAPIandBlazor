@@ -39,41 +39,43 @@ namespace JobApp
           options.UseSqlServer(
               Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddScoped<IUserClaimsPrincipalFactory<JobAppUser>, AdditionalUserClaimsPrincipalFactory>();
-            services.AddControllersWithViews();
-      services.AddRazorPages();
+        services.AddScoped<IUserClaimsPrincipalFactory<JobAppUser>, AdditionalUserClaimsPrincipalFactory>();
+        services.AddControllersWithViews();
+        services.AddRazorPages();
 
-      services.Configure<IdentityOptions>(options =>
-{
-      // Password settings.
-      options.Password.RequireDigit = true;
- options.Password.RequireLowercase = true;
- options.Password.RequireNonAlphanumeric = true;
- options.Password.RequireUppercase = true;
- options.Password.RequiredLength = 6;
- options.Password.RequiredUniqueChars = 1;
 
-      // Lockout settings.
-      options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
- options.Lockout.MaxFailedAccessAttempts = 5;
- options.Lockout.AllowedForNewUsers = true;
 
-      // User settings.
-      options.User.AllowedUserNameCharacters =
-      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
- options.User.RequireUniqueEmail = false;
-});
+        services.Configure<IdentityOptions>(options =>
+        {
+            // Password settings.
+            options.Password.RequireDigit = true;
+            options.Password.RequireLowercase = true;
+            options.Password.RequireNonAlphanumeric = true;
+            options.Password.RequireUppercase = true;
+            options.Password.RequiredLength = 6;
+            options.Password.RequiredUniqueChars = 1;
 
-      services.ConfigureApplicationCookie(options =>
-      {
-      // Cookie settings
-      options.Cookie.HttpOnly = true;
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(2880);
+            // Lockout settings.
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+            options.Lockout.MaxFailedAccessAttempts = 5;
+            options.Lockout.AllowedForNewUsers = true;
 
-        options.LoginPath = "/Identity/Account/Login";
-        options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-        options.SlidingExpiration = true;
-      });
+            // User settings.
+            options.User.AllowedUserNameCharacters =
+              "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+            options.User.RequireUniqueEmail = false;
+        });
+
+        // Cookie settings
+        services.ConfigureApplicationCookie(options =>
+        {
+            options.Cookie.HttpOnly = true;
+            options.ExpireTimeSpan = TimeSpan.FromMinutes(2880);
+
+            options.LoginPath = "/Identity/Account/Login";
+            options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+            options.SlidingExpiration = true;
+        });
 
     }
 
