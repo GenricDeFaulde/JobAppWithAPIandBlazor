@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobAPI", "JobAPI\JobAPI.csproj", "{082032CE-A9AE-4238-85CA-1FE745FF58E6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobApp", "JobAppMVC\JobApp.csproj", "{B40505FD-FD9C-43CF-9A06-ECF2DECE8AA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "__JobApp__", "JobAppMVC\__JobApp__.csproj", "{B40505FD-FD9C-43CF-9A06-ECF2DECE8AA3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobApp.Library", "JobApp.Library\JobApp.Library.csproj", "{8EF5FC6F-9CD3-4734-9974-E5E39BFBC973}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobAppPortal", "JobAppPortal\JobAppPortal.csproj", "{D031DDFF-9B0B-4EC6-80AE-92FEFED2E5A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobAppPortal", "JobAppPortal\JobAppPortal.csproj", "{D031DDFF-9B0B-4EC6-80AE-92FEFED2E5A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

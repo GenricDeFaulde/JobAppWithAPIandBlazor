@@ -124,6 +124,15 @@ namespace JobAPI
 
         protected virtual void ConfigureDependencies(IServiceCollection services)
         {
+            services.AddCors(policy => 
+            {
+                policy.AddPolicy("OpenCorsPolicy", options =>
+                    options.AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod());
+            });
+
+
             services.AddDbContext<JobDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -134,6 +143,7 @@ namespace JobAPI
                                         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddRazorPages();
+            //services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddSwaggerGen(c =>
             {
@@ -174,9 +184,18 @@ namespace JobAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                //app.UseMigrationsEndPoint();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
             }
 
             app.UseHttpsRedirection();
+            app.UseCors("OpenCorsPolicy");
+
+            app.UseStaticFiles();
 
             app.UseRouting();
 
@@ -202,8 +221,3 @@ namespace JobAPI
     }
 }
 
-
-//{
-//    "access_Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZ2VucmljLmRlZmF1bGRlQGdtYWlsLmNvbSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiNWQwNTg5ZDktZWFkMi00YTljLTkwYTktMTg3YTYzMTY0MTRlIiwibmJmIjoiMTYyMDIyNTc2MiIsImV4cCI6IjE2MjAzMTIxNjIifQ.nUJ8B-PoI4k4Zl2axnEzgd4FDglYhCFAnWQmen-RG8M",
-//  "userName": "genric.defaulde@gmail.com"
-//}
