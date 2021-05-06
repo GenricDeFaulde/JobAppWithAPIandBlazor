@@ -370,3 +370,5 @@ FodyWeavers.xsd
 # Userfiles
 
 _Progress.txt
+/JobAPI/wwwroot
+/JobAppPortal/wwwroot
