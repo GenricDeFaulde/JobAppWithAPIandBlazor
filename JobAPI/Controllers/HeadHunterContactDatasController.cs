@@ -28,9 +28,9 @@ namespace JobAPI.Controllers
 
 
 
-        // GET: HeadHunterContactDatas/Details/5
+        // GET: HeadHunterContactDatas/Get/5
         [Authorize]
-        [HttpGet("{id}")]
+        [HttpGet("Get/{id}")]
         [SwaggerOperation("GetHeadHunterContactData")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
@@ -57,7 +57,7 @@ namespace JobAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize(Roles = "SuperAdmin")]
-        [HttpPost("CreateHeadHunterContactData")]
+        [HttpPost("Create")]
         [SwaggerOperation("CreateHeadHunterContactData")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
@@ -79,7 +79,7 @@ namespace JobAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize(Roles = "SuperAdmin")]
-        [HttpPut("{id}")]
+        [HttpPut("Edit/{id}")]
         [SwaggerOperation("EditHeadHunterContactData")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
@@ -119,7 +119,7 @@ namespace JobAPI.Controllers
 
         // DELETE: HeadHunterContactDatas/Delete/5
         [Authorize(Roles = "SuperAdmin")]
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         [SwaggerOperation("DeleteHeadHunterContactData")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]

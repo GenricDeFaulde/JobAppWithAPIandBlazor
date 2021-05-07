@@ -18,14 +18,14 @@ namespace JobAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class UserController : ControllerBase
+    public class _AdminController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<JobAppUser> _userManager;
         private readonly IConfiguration _config;
 
         //TODO build UserController for authentication purposes.
-        public UserController(ApplicationDbContext context, UserManager<JobAppUser> userManager, IConfiguration config)
+        public _AdminController(ApplicationDbContext context, UserManager<JobAppUser> userManager, IConfiguration config)
         {
             _context = context;
             _userManager = userManager;
@@ -33,6 +33,7 @@ namespace JobAPI.Controllers
         }
 
         [HttpGet]
+        [Route("Users/Get")]
         public UserModel GetById()
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -43,7 +44,7 @@ namespace JobAPI.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        [Route("Admin/GetAllUsers")]
+        [Route("Users/GetAllUsers")]
         public List<ApplicationUserModel> GetAllUsers()
         {
             List<ApplicationUserModel> output = new List<ApplicationUserModel>();
@@ -76,7 +77,7 @@ namespace JobAPI.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        [Route("Admin/GetAllRoles")]
+        [Route("Users/GetAllRoles")]
         public Dictionary<string, string> GetAllRoles()
         {
             var roles = _context.Roles.ToDictionary(x => x.Id, x => x.Name);
@@ -87,7 +88,7 @@ namespace JobAPI.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        [Route("Admin/AddRole")]
+        [Route("Users/AddRole")]
         public async Task AddRole(UserRolePairModel pairing)
         {
             var user = await _userManager.FindByIdAsync(pairing.UserId);
@@ -96,7 +97,7 @@ namespace JobAPI.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        [Route("Admin/RemoveRole")]
+        [Route("Users/RemoveRole")]
         public async Task RemoveRole(UserRolePairModel pairing)
         {
             var user = await _userManager.FindByIdAsync(pairing.UserId);

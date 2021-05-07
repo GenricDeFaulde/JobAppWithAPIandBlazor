@@ -26,9 +26,9 @@ namespace JobAPI.Controllers
         }
 
 
-        // GET: Users/Details/5
+        // GET: Users/Get/5
         [Authorize]
-        [HttpGet("{id}")]
+        [HttpGet("Get/{id}")]
         [SwaggerOperation("GetUser")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
@@ -54,7 +54,7 @@ namespace JobAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize(Roles = "SuperAdmin")]
-        [HttpPost("CreateUser")]
+        [HttpPost("Create")]
         [SwaggerOperation("CreateUser")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
@@ -77,7 +77,7 @@ namespace JobAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize(Roles = "SuperAdmin")]
-        [HttpPut("{id}")]
+        [HttpPut("Edit/{id}")]
         [SwaggerOperation("EditUser")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
@@ -116,7 +116,7 @@ namespace JobAPI.Controllers
 
         // DELETE: Users/Delete/5
         [Authorize(Roles = "SuperAdmin")]
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         [SwaggerOperation("DeleteUser")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]

@@ -26,10 +26,10 @@ namespace JobAPI.Controllers
         }
 
 
-        // GET: CompanyBranches
+        // GET: CompanyBranches/GetAll
         //[Authorize]
-        [HttpGet("GetCompanyBranches")]
-        [SwaggerOperation("GetCompanyBranchesByCompanyId")]
+        [HttpGet("GetAll")]
+        [SwaggerOperation("GetAllCompanyBranches")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         public async Task<ActionResult<List<CompanyBranch>>> Index()
@@ -49,9 +49,9 @@ namespace JobAPI.Controllers
         }
 
 
-        // GET: CompanyBranches/Details/5
+        // GET: CompanyBranches/Get/5
         //[Authorize]
-        [HttpGet("{id}")]
+        [HttpGet("Get/{id}")]
         [SwaggerOperation("GetCompanyBranch")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
@@ -73,13 +73,39 @@ namespace JobAPI.Controllers
             return companyBranch;
         }
 
+        // GET: CompanyBranches/GetAllBranchesForCompanyById/5
+        //[Authorize]
+        [HttpGet("GetAllByCompanyId/{id}")]
+        [SwaggerOperation("GetyBranchesForCompany")]
+        [SwaggerResponse((int)HttpStatusCode.OK)]
+        [SwaggerResponse((int)HttpStatusCode.NotFound)]
+        public async Task<ActionResult<CompanyBranch>> GetAllForCompanyById(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var companyBranch = await _context.CompanyBranchDB
+                .Where(c => c.CompanyId == id)
+                .Include(i => i.Company)
+                .ToListAsync();
+
+            if (companyBranch == null)
+            {
+                return NotFound();
+            }
+
+            return new JsonResult(companyBranch);
+        }
+
 
 
         // POST: CompanyBranches/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize(Roles = "SuperAdmin")]
-        [HttpPost("CreateCompanyBranch")]
+        [HttpPost("Create")]
         [SwaggerOperation("CreateCompanyBranch")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
@@ -108,7 +134,7 @@ namespace JobAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize(Roles = "SuperAdmin")]
-        [HttpPut("{id}")]
+        [HttpPut("Edit/{id}")]
         [SwaggerOperation("EditCompanyBranch")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
@@ -143,7 +169,7 @@ namespace JobAPI.Controllers
 
         // DELETE: CompanyBranches/Delete/5
         [Authorize(Roles = "SuperAdmin")]
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         [SwaggerOperation("DeleteCompanyBranch")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]

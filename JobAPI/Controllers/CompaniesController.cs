@@ -31,10 +31,10 @@ namespace JobAPI.Controllers
             this._hostEnvironment = hostEnvironment;
         }
 
-        // GET: Companies/Details/
+        // GET: Companies/GetAll/
         [Authorize]
-        [HttpGet]
-        [SwaggerOperation("GetCompany")]
+        [HttpGet("GetAll")]
+        [SwaggerOperation("GetAllCompanies")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         public async Task<ActionResult<Company>> Details()
@@ -57,9 +57,9 @@ namespace JobAPI.Controllers
         }
 
 
-        // GET: Companies/Details/5
+        // GET: Companies/Get/5
         //[Authorize]
-        [HttpGet("{id}")]
+        [HttpGet("Get/{id}")]
         [SwaggerOperation("GetCompanyById")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
@@ -92,7 +92,7 @@ namespace JobAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize(Roles = "SuperAdmin")]
-        [HttpPost("CreateCompany")]
+        [HttpPost("Create")]
         [SwaggerOperation("CreateCompany")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
@@ -116,7 +116,7 @@ namespace JobAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize(Roles = "SuperAdmin")]
-        [HttpPut("{id}")]
+        [HttpPut("Edit/{id}")]
         [SwaggerOperation("EditCompany")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
@@ -155,7 +155,7 @@ namespace JobAPI.Controllers
 
         // DELETE Companies/Delete/5
         [Authorize(Roles = "SuperAdmin")]
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         [SwaggerOperation("DeleteCompany")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]

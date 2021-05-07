@@ -25,10 +25,10 @@ namespace JobAPI.Controllers
                 _context = context;
             }
 
-        // GET: JobExchanges/
+        // GET: JobExchanges/GetAll
         [Authorize]
-        [HttpGet]
-        [SwaggerOperation("GetJobExchanges")]
+        [HttpGet("GetAll")]
+        [SwaggerOperation("GetAllJobExchanges")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         public async Task<ActionResult<JobExchange>> GetExchanges()
@@ -54,9 +54,9 @@ namespace JobAPI.Controllers
         }
 
 
-        // GET: JobExchanges/Details/5
+        // GET: JobExchanges/Get/5
         [Authorize]
-            [HttpGet("{id}")]
+            [HttpGet("Get/{id}")]
             [SwaggerOperation("GetJobExchange")]
             [SwaggerResponse((int)HttpStatusCode.OK)]
             [SwaggerResponse((int)HttpStatusCode.NotFound)]
@@ -91,7 +91,7 @@ namespace JobAPI.Controllers
             // To protect from overposting attacks, enable the specific properties you want to bind to, for 
             // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
             [Authorize(Roles = "SuperAdmin")]
-            [HttpPost("CreateJobExchange")]
+            [HttpPost("Create")]
             [SwaggerOperation("CreateJobExchange")]
             [SwaggerResponse((int)HttpStatusCode.OK)]
             [SwaggerResponse((int)HttpStatusCode.NotFound)]
@@ -115,7 +115,7 @@ namespace JobAPI.Controllers
             // To protect from overposting attacks, enable the specific properties you want to bind to, for 
             // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
             [Authorize(Roles = "SuperAdmin")]
-        [HttpPut("{id}")]
+        [HttpPut("Edit/{id}")]
         [SwaggerOperation("EditJobExchange")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
@@ -154,7 +154,7 @@ namespace JobAPI.Controllers
 
             // DELETE: JobExchanges/Delete/5
             [Authorize(Roles = "SuperAdmin")]
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         [SwaggerOperation("DeleteJobExchange")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
