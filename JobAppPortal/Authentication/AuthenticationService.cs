@@ -34,8 +34,8 @@ namespace JobAppPortal.Authentication
                 new KeyValuePair<string, string>("username", userForAuthentication.Email),
                 new KeyValuePair<string, string>("password", userForAuthentication.Password)
             });
-
-            var authResult = await _client.PostAsync("https://localhost:", data);
+            // !NOTE Put real server here. LOCALHOST ONLY FOR TESTING
+            var authResult = await _client.PostAsync("https://localhost:44372/_token", data);
             var authContent = await authResult.Content.ReadAsStringAsync();
 
             if (authResult.IsSuccessStatusCode == false)
