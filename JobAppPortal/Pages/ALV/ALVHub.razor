@@ -1,0 +1,21 @@
+﻿@page "/ALV"
+@inject NavigationManager NavManager
+
+
+
+<AuthorizeView>
+    <Authorized>
+        <h1>Hello,@context.User.FindFirst(ClaimTypes.Name).Value.</h1>
+        <h2>ALV Hub</h2>
+    </Authorized>
+    <NotAuthorized>
+        <h1>Hello, world!</h1>
+        Please <a href="login">Log In</a> to use this service.
+    </NotAuthorized>
+</AuthorizeView>
+
+
+
+@code {
+
+}

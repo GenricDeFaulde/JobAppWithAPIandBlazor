@@ -24,7 +24,7 @@ namespace JobAPI.Controllers
         private readonly UserManager<JobAppUser> _userManager;
         private readonly IConfiguration _config;
 
-        //TODO build UserController for authentication purposes.
+        //TODO build better UserController for authentication purposes.
         public _AdminController(ApplicationDbContext context, UserManager<JobAppUser> userManager, IConfiguration config)
         {
             _context = context;
@@ -64,10 +64,6 @@ namespace JobAPI.Controllers
 
                 u.Roles = userRoles.Where(x => x.UserId == u.Id).ToDictionary(key => key.RoleId, val => val.Name);
 
-                //foreach (var r in user.Roles)
-                //{
-                //    u.Roles.Add(r.RoleId, roles.Where(x => x.Id == r.RoleId).First().Name);
-                //}
 
                 output.Add(u);
             }
