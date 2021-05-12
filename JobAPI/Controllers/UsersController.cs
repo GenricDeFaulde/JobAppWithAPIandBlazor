@@ -25,6 +25,26 @@ namespace JobAPI.Controllers
             _context = context;
         }
 
+        // GET: Users/GetAll
+        [Authorize]
+        [HttpGet("GetAll")]
+        [SwaggerOperation("GetAllUsers")]
+        [SwaggerResponse((int)HttpStatusCode.OK)]
+        [SwaggerResponse((int)HttpStatusCode.NotFound)]
+        public async Task<ActionResult<User>> Details()
+        {
+
+            var user = await _context.UserDB
+                .ToListAsync();
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return new JsonResult(user);
+        }
+
+
 
         // GET: Users/Get/5
         [Authorize]

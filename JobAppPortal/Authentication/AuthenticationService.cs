@@ -1,6 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using JobAppPortal.Models;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,14 +17,17 @@ namespace JobAppPortal.Authentication
         private readonly HttpClient _client;
         private readonly AuthenticationStateProvider _authStateProvider;
         private readonly ILocalStorageService _localStorage;
+        private readonly IConfiguration _config;
 
         public AuthenticationService(HttpClient client,
                                      AuthenticationStateProvider authStateProvider,
-                                     ILocalStorageService localStorage)
+                                     ILocalStorageService localStorage, 
+                                     IConfiguration config)
         {
             _client = client;
             _authStateProvider = authStateProvider;
             _localStorage = localStorage;
+            _config = config;
         }
 
         public async Task<AuthenticatedUserModel> Login(AuthenticationUserModel userForAuthentication)
@@ -34,8 +38,7 @@ namespace JobAppPortal.Authentication
                 new KeyValuePair<string, string>("username", userForAuthentication.Email),
                 new KeyValuePair<string, string>("password", userForAuthentication.Password)
             });
-            // !NOTE Put real server here. LOCALHOST ONLY FOR TESTING
-            var authResult = await _client.PostAsync("https://localhost:44372/_token", data);
+            var authResult = await _client.PostAsync(_config["JwtRequestUrl"], data);
             var authContent = await authResult.Content.ReadAsStringAsync();
 
             if (authResult.IsSuccessStatusCode == false)

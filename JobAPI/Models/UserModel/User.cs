@@ -14,14 +14,19 @@ namespace JobAPI.Models.UserModel
 
         /// <summary>
         /// Identity, Required
-        /// Identity, Required
         /// </summary>
         [Key]
         [Required]
         public int Id { get; set; }
 
         /// <summary>
-        /// Required, Min length = 3, Max length = 30
+        /// AuthProfileIdentity, Required
+        /// </summary>
+        [Key]
+        [Required]
+        public string ProfileId { get; set; }
+
+        /// <summary>
         /// Required, Min length = 3, Max length = 30
         /// </summary>
         [Required]
@@ -32,7 +37,6 @@ namespace JobAPI.Models.UserModel
 
         /// <summary>
         /// Required, Max length = 50
-        /// Required, Max length = 50
         /// </summary>
         [Required]
         [MaxLength(50)]
@@ -40,7 +44,6 @@ namespace JobAPI.Models.UserModel
         public string LastName { get; set; }
 
         /// <summary>
-        /// Required, Max length = 20
         /// Required, Max length = 20
         /// </summary>
         [Required]
@@ -50,14 +53,12 @@ namespace JobAPI.Models.UserModel
 
         /// <summary>
         /// Max length = 50
-        /// Max length = 50
         /// </summary>
         [MaxLength(50)]
         [StringLength(50)]
         public string Religion { get; set; }
 
         /// <summary>
-        /// Max length = 20
         /// Max length = 20     Biological Sex of User
         /// </summary>
         [MaxLength(20)]
@@ -65,7 +66,6 @@ namespace JobAPI.Models.UserModel
         public string Sex { get; set; }
 
         /// <summary>
-        /// Max length = 20
         /// Max length = 20     Gender of User
         /// </summary>
         [MaxLength(20)]
@@ -83,7 +83,6 @@ namespace JobAPI.Models.UserModel
         public byte[] PictureAlt { get; set; }
 
         /// <summary>
-        /// Required, Max length = 50
         /// Required, Max length = 50     Nationality
         /// </summary>
         [Required]
@@ -92,7 +91,6 @@ namespace JobAPI.Models.UserModel
         public string Nationality { get; set; }
 
         /// <summary>
-        /// Max length = 50
         /// Max length = 50     2nd Nationality if applicant
         /// </summary>
         [MaxLength(50)]

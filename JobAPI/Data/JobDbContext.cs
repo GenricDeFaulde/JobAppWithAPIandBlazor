@@ -137,10 +137,7 @@ namespace JobAPI.Data
         public virtual Microsoft.EntityFrameworkCore.DbSet<global::JobAPI.Models.UserModel.UserWebsite> UserWebSitesDB { get; set; }
         #endregion DbSets
 
-        /// <summary>
-        /// Default connection string
-        /// </summary>
-        //public static string ConnectionString { get; set; } = @"Data Source=BIGDEFAULDE;Initial Catalog=JobApp;Integrated Security=True";
+        
 
         /// <inheritdoc />
         public JobDbContext(DbContextOptions<JobDbContext> options) : base(options)
@@ -658,6 +655,9 @@ namespace JobAPI.Data
                         .Property(t => t.Id)
                         .IsRequired()
                         .ValueGeneratedOnAdd();
+            modelBuilder.Entity<global::JobAPI.Models.UserModel.User>()
+                        .Property(t => t.ProfileId)
+                        .IsRequired();
             modelBuilder.Entity<global::JobAPI.Models.UserModel.User>()
                         .Property(t => t.FirstName)
                         .HasMaxLength(30)

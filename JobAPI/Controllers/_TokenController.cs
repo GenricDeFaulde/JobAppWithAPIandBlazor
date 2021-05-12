@@ -2,6 +2,7 @@
 using JobAPI.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -17,13 +18,13 @@ namespace JobAPI.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<JobAppUser> _userManager;
+        private readonly IConfiguration _config;
 
-
-
-        public _TokenController(ApplicationDbContext context, UserManager<JobAppUser> userManager)
+        public _TokenController(ApplicationDbContext context, UserManager<JobAppUser> userManager, IConfiguration config)
         {
             _context = context;
             _userManager = userManager;
+            _config = config;
         }
 
 
@@ -77,8 +78,7 @@ namespace JobAPI.Controllers
                             new JwtHeader(
                                 new SigningCredentials(
                                     new SymmetricSecurityKey(
-                                        //TODO Switch to save method. ONLY FOR TESTING!
-                                        Encoding.UTF8.GetBytes("MySecretKeyIsSecretSoDoNotTell")
+                                        Encoding.UTF8.GetBytes(_config["JwtSecurityKey"])
                                         ),
                                     SecurityAlgorithms.HmacSha256)),
                             new JwtPayload(claims)

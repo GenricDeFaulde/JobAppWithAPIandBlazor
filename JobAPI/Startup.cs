@@ -93,7 +93,7 @@ namespace JobAPI
                     {
                         ValidateIssuerSigningKey = true,
                         //TODO Set actual secret. ONLY FOR TESTING
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MySecretKeyIsSecretSoDoNotTell")),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"])),
                         ValidateIssuer = false,
                         ValidateAudience = false,
                         ValidateLifetime = true,
