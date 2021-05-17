@@ -5,15 +5,16 @@
 
 
 <AuthorizeView>
-    <Authorized>
+    <Authorized Context="Auth">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-6 mb-0">
-                    <h1 class="mb-0">Users</h1>
+                    <h1 class="mb-0">Usermanager</h1>
                 </div>
                 <div class="col-lg-6 mt-auto ">
                 </div>
             </div>
+
             @if (users is null)
             {
                 @if (errorMessage is not null)
@@ -27,78 +28,123 @@
             }
             else
             {
-                <table class="table table-striped table-hover table-sm table-dark" cellspacing="25">
-                    <thead class="table-bordered ">
-                        <tr>
-                            <th>
-                                Name
-                            </th>
-                            <th>
-                                Geburtstag
-                            </th>
-                            <th>
-                                Religion
-                            </th>
-                            <th>
-                                Geschl.
-                            </th>
-                            <th>
-                                Gender
-                            </th>
-                            <th>
-                                Nationalität
-                            </th>
-                            <th>
-                                Roles
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var user in users)
-                        {
-                            <tr>
-                                <td>
-                                    @user.FirstName @user.LastName
-                                </td>
-                                <td>
-                                    @user.BirthDate
-                                </td>
-                                <td>
-                                    @user.Religion
-                                </td>
-                                <td>
-                                    @user.Sex
-                                </td>
-                                <td>
-                                    @user.Gender
-                                </td>
-                                <td>
-                                    @user.Nationality
-                                </td>
-                                <td>
-                                    @foreach (var userRole in userRoles.Where(p => p.Id == user.ProfileId))
-                                    {
-                                        @foreach(var role in userRole.Roles) 
-                                        {
-                                            @role.Value 
-                                        }
-                                    }
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                <div class="row">
+                    <Dropdown TItem="string" OnSelected="@OnSelected">
+                        <InitialTip>Select a User</InitialTip>
+                        <ChildContent>
+                            @foreach (var user in users)
+                            {
+                                <DropdownListItem Item="@user.ProfileId.ToString()"> @user.FirstName @user.LastName</DropdownListItem>
+                            }
+                        </ChildContent>
+                    </Dropdown>
+                    <button class="btn btn-primary" @onclick="NewUser">New User</button>
+                </div>
             }
         </div>
+        <div class="row">
+            @if (detailUser != "0")
+            {
+    <table class="table table-striped table-hover table-sm table-dark mt-2" cellspacing="25">
+        <thead class="table-bordered ">
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Geburtstag
+                </th>
+                <th>
+                    Religion
+                </th>
+                <th>
+                    Geschl.
+                </th>
+                <th>
+                    Gender
+                </th>
+                <th>
+                    Nationalität
+                </th>
+                <th>
+                    Roles
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (detailUser == "new")
+            {
+                
+                <tr>
+                    <td>bla
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var user in users.Where(e => e.ProfileId == detailUser))
+                {
+                    <tr>
+                        <td>
+                            @user.FirstName @user.LastName
+                        </td>
+                        <td>
+                            @user.BirthDate
+                        </td>
+                        <td>
+                            @user.Religion
+                        </td>
+                        <td>
+                            @user.Sex
+                        </td>
+                        <td>
+                            @user.Gender
+                        </td>
+                        <td>
+                            @user.Nationality
+                        </td>
+                        <td>
+                            @foreach (var userRole in userRoles.Where(p => p.Id == user.ProfileId))
+                            {
+                                @foreach (var role in userRole.Roles)
+                                {
+                                    @role.Value
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+            }
+            @if(detailUser == "new")
+                {
+                    <button>bla</button>
+                }
+
+
+</div>
         <ul>
-            <li>List Users</li>
-            <li>Selct Users</li>
+            <li>List Users [DONE]</li>
+            <li>Selct Users [DONE]</li>
             <li>Edit Users</li>
             <li>Edit User Roles</li>
         </ul>
     </Authorized>
     <NotAuthorized>
-        <h1>Hello, world!</h1>
         Please <a href="login">Log In</a> to use this service.
     </NotAuthorized>
 </AuthorizeView>
@@ -106,11 +152,18 @@
 
 
 @code {
+
+    // fields and variables
+
     private User[] users;
     private UserRole[] userRoles;
     private Role[] roles;
 
     private string errorMessage = null;
+
+    private string detailUser = "0";
+
+    // initializing
 
     protected override async Task OnInitializedAsync()
     {
@@ -126,6 +179,35 @@
         }
     }
 
+
+    // Methods
+
+    private void OnSelected(string selection)
+    {
+        detailUser = selection;
+    }
+
+    private void NewUser()
+    {
+        detailUser = "new";
+    }
+
+    @*private void ToggleShowUser(int userId)
+        {
+            @if(detailUser == userId)
+            {
+                detailUser = 0;
+            }
+            else
+            {
+                detailUser = userId;
+            }
+
+        }*@
+
+
+    // classes
+    #region classes
     public class User
     {
         public int Id { get; set; }
@@ -246,16 +328,18 @@
     }
 
     @*public class AppUserName
-    {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public bool IsAdmin { get; set; }
-        public string AuthId { get; set; }
-    }*@
+        {
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public bool IsAdmin { get; set; }
+            public string AuthId { get; set; }
+        }*@
 
     public class Role
     {
         public string Key { get; set; }
         public string Value { get; set; }
     }
+    #endregion
+
 }
