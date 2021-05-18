@@ -11,132 +11,169 @@
                 <div class="col-lg-6 mb-0">
                     <h1 class="mb-0">Usermanager</h1>
                 </div>
-                <div class="col-lg-6 mt-auto ">
-                </div>
-            </div>
-
-            @if (users is null)
-            {
-                @if (errorMessage is not null)
+                @if (users is null)
                 {
-                    <p><em>@errorMessage</em></p>
+                    @if (errorMessage is not null)
+                    {
+                        <p><em>@errorMessage</em></p>
+                    }
+                    else
+                    {
+                        <p><em>Loading Data...</em></p>
+                    }
                 }
                 else
                 {
-                    <p><em>Loading Data...</em></p>
+                    <div class="col-lg-3 mt-auto ">
+                        <Dropdown TItem="string" OnSelected="@OnSelected">
+                            <InitialTip>Select a User</InitialTip>
+                            <ChildContent>
+                                @foreach (var user in users)
+                                {
+                                    <DropdownListItem Item="@user.ProfileId.ToString()"> @user.FirstName @user.LastName</DropdownListItem>
+                                }
+                            </ChildContent>
+                        </Dropdown>
+                    </div>
+                    <div class="col-lg-3 mt-auto text-right">
+                        <button class="btn btn-primary" @onclick="NewUser">New User</button>
+                    </div>
                 }
-            }
-            else
-            {
-                <div class="row">
-                    <Dropdown TItem="string" OnSelected="@OnSelected">
-                        <InitialTip>Select a User</InitialTip>
-                        <ChildContent>
-                            @foreach (var user in users)
-                            {
-                                <DropdownListItem Item="@user.ProfileId.ToString()"> @user.FirstName @user.LastName</DropdownListItem>
-                            }
-                        </ChildContent>
-                    </Dropdown>
-                    <button class="btn btn-primary" @onclick="NewUser">New User</button>
-                </div>
-            }
+            </div>
         </div>
         <div class="row">
-            @if (detailUser != "0")
-            {
-    <table class="table table-striped table-hover table-sm table-dark mt-2" cellspacing="25">
-        <thead class="table-bordered ">
-            <tr>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Geburtstag
-                </th>
-                <th>
-                    Religion
-                </th>
-                <th>
-                    Geschl.
-                </th>
-                <th>
-                    Gender
-                </th>
-                <th>
-                    Nationalität
-                </th>
-                <th>
-                    Roles
-                </th>
-            </tr>
-        </thead>
-        <tbody>
             @if (detailUser == "new")
             {
-                
-                <tr>
-                    <td>bla
-                    </td>
-                    <td>
-                    </td>
-                    <td>
-                    </td>
-                    <td>
-                    </td>
-                    <td>
-                    </td>
-                    <td>
-                    </td>
-                    <td>
-                    </td>
-                </tr>
+                <EditForm Model="_editUser" class="table-striped table-hover table-sm table-dark mt-2" cellspacing="25">
+                    <thead class="table-bordered ">
+                        <tr>
+                            <th>
+                                FirstName
+                            </th>
+                            <th>
+                                LastName
+                            </th>
+                            <th>
+                                Geburtstag
+                            </th>
+                            <th>
+                                Religion
+                            </th>
+                            <th>
+                                Geschl.
+                            </th>
+                            <th>
+                                Gender
+                            </th>
+                            <th>
+                                Nationalität
+                            </th>
+                            <th>
+                                Roles
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <InputText id="firstName" @bind-Value="_editUser.FirstName" placeholder="Vorname">name</InputText>
+                            </td>
+                            <td>
+                                <InputText id="lastName" @bind-Value="_editUser.LastName" placeholder="Nachname">name</InputText>
+                            </td>
+                            <td>
+                                <InputText id="birthDate" @bind-Value="_editUser.BirthDate" placeholder="dd.mmyyyy"></InputText>
+                            </td>
+                            <td>
+                                <InputText id="religion" @bind-Value="_editUser.Religion"  placeholder="Religion"></InputText>
+                            </td>
+                            <td>
+                                <InputText id="sex" @bind-Value="_editUser.Sex" placeholder="Sex"></InputText>
+                            </td>
+                            <td>
+                                <InputText id="gender" @bind-Value="_editUser.Gender" placeholder="Gender"></InputText>
+                            </td>
+                            <td>
+                                <InputText id="nationality" @bind-Value="_editUser.Nationality" placeholder="Nationalitaet"></InputText>
+                            </td>
+                            <td>
+                                <Microsoft.AspNetCore.Components.Forms.InputRadioGroup id="roles" @bind-Value="_editUser.Roles" >
+                                    @foreach(var role in roles)
+                                        {
+                                            <InputRadio Value="role.Key" /> @role.Value <br/>
+                                        }
+                                </Microsoft.AspNetCore.Components.Forms.InputRadioGroup>
+                                <button class="btn btn-primary">Submit</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </EditForm>
             }
-            else
+            @if (detailUser != "0" && detailUser != "new")
             {
-                @foreach (var user in users.Where(e => e.ProfileId == detailUser))
-                {
-                    <tr>
-                        <td>
-                            @user.FirstName @user.LastName
-                        </td>
-                        <td>
-                            @user.BirthDate
-                        </td>
-                        <td>
-                            @user.Religion
-                        </td>
-                        <td>
-                            @user.Sex
-                        </td>
-                        <td>
-                            @user.Gender
-                        </td>
-                        <td>
-                            @user.Nationality
-                        </td>
-                        <td>
-                            @foreach (var userRole in userRoles.Where(p => p.Id == user.ProfileId))
-                            {
-                                @foreach (var role in userRole.Roles)
-                                {
-                                    @role.Value
-                                }
-                            }
-                        </td>
-                    </tr>
-                }
+                <table class="table table-striped table-hover table-sm table-dark mt-2" cellspacing="25">
+                    <thead class="table-bordered ">
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Geburtstag
+                            </th>
+                            <th>
+                                Religion
+                            </th>
+                            <th>
+                                Geschl.
+                            </th>
+                            <th>
+                                Gender
+                            </th>
+                            <th>
+                                Nationalität
+                            </th>
+                            <th>
+                                Roles
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in users.Where(e => e.ProfileId == detailUser))
+                        {
+                            <tr>
+                                <td>
+                                    @user.FirstName @user.LastName
+                                </td>
+                                <td>
+                                    @user.BirthDate
+                                </td>
+                                <td>
+                                    @user.Religion
+                                </td>
+                                <td>
+                                    @user.Sex
+                                </td>
+                                <td>
+                                    @user.Gender
+                                </td>
+                                <td>
+                                    @user.Nationality
+                                </td>
+                                <td>
+                                    @foreach (var userRole in userRoles.Where(p => p.Id == user.ProfileId))
+                                    {
+                                        @foreach (var role in userRole.Roles)
+                                        {
+                                            @role.Value
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             }
-        </tbody>
-    </table>
-            }
-            @if(detailUser == "new")
-                {
-                    <button>bla</button>
-                }
-
-
-</div>
+        </div>
         <ul>
             <li>List Users [DONE]</li>
             <li>Selct Users [DONE]</li>
@@ -156,8 +193,9 @@
     // fields and variables
 
     private User[] users;
+    EditUserModel _editUser = new EditUserModel() ;
     private UserRole[] userRoles;
-    private Role[] roles;
+    private Dictionary<string, string> roles { get; set; } = new Dictionary<string, string>();
 
     private string errorMessage = null;
 
@@ -171,7 +209,7 @@
         {
             users = await Http.GetFromJsonAsync<User[]>("https://localhost:44372/Api/Users/GetAll");
             userRoles = await Http.GetFromJsonAsync<UserRole[]>("https://localhost:44372/Api/_Admin/Users/GetAllUsers");
-            roles = await Http.GetFromJsonAsync<Role[]>("https://localhost:44372/Api/_Admin/Users/GetAllRoles");
+            roles = await Http.GetFromJsonAsync<Dictionary<string, string>>("https://localhost:44372/api/_Admin/Users/GetAllRoles");
         }
         catch (Exception exception)
         {
