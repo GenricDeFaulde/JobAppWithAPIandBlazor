@@ -18,6 +18,7 @@ namespace JobAppPortal.Authentication
         private readonly AuthenticationStateProvider _authStateProvider;
         private readonly ILocalStorageService _localStorage;
         private readonly IConfiguration _config;
+        private string authTokenStorageKey;
 
         public AuthenticationService(HttpClient client,
                                      AuthenticationStateProvider authStateProvider,
@@ -28,6 +29,7 @@ namespace JobAppPortal.Authentication
             _authStateProvider = authStateProvider;
             _localStorage = localStorage;
             _config = config;
+            authTokenStorageKey = _config["authTokenStorageKey"];
         }
 
         public async Task<AuthenticatedUserModel> Login(AuthenticationUserModel userForAuthentication)
@@ -38,6 +40,7 @@ namespace JobAppPortal.Authentication
                 new KeyValuePair<string, string>("username", userForAuthentication.Email),
                 new KeyValuePair<string, string>("password", userForAuthentication.Password)
             });
+
             var authResult = await _client.PostAsync(_config["JwtRequestUrl"], data);
             var authContent = await authResult.Content.ReadAsStringAsync();
 
@@ -48,7 +51,7 @@ namespace JobAppPortal.Authentication
 
             var result = JsonSerializer.Deserialize<AuthenticatedUserModel>(authContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-            await _localStorage.SetItemAsync("authToken", result.Access_Token);
+            await _localStorage.SetItemAsync("authTokenStorageKey", result.Access_Token);
 
             ((AuthStateProvider)_authStateProvider).NotifyUserAuthentication(result.Access_Token);
 
@@ -60,7 +63,7 @@ namespace JobAppPortal.Authentication
 
         public async Task Logout()
         {
-            await _localStorage.RemoveItemAsync("authToken");
+            await _localStorage.RemoveItemAsync("authTokenStorageKey");
             ((AuthStateProvider)_authStateProvider).NotifyUserLogout();
             _client.DefaultRequestHeaders.Authorization = null;
         }

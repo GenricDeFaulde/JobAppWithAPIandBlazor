@@ -1,0 +1,53 @@
+﻿
+<div>
+    <label>@Caption</label>
+
+    @switch (PType)
+    {
+        case "System.String":
+            var sValue = (Value is not null) ? Value.ToString() : "";
+            
+                if (@Caption == "ProfileId")
+                {
+                    <input type="text" @onchange="OnChange" value="@sValue" placeholder="@Caption" disabled />
+                }
+                else
+                {
+                    <input type="text" @onchange="OnChange" value="@sValue" placeholder="@Caption" />
+                }
+            
+            break;
+        case "System.Boolean":
+                <input type="checkbox" value="@Value" checked="@Value.ToString()" @onchange="OnChange" />
+                @Value.ToString()
+             break;
+        case "System.Int32":
+                if (@Caption == "Id")
+                {
+                    <input type="number" value="@Value" @onchange="OnChange" disabled />
+                }
+                else
+                {
+                    <input type="number" value="@Value" @onchange="OnChange" />
+                }
+            break;
+        default: /*Unsuported/Not implemented editing*/
+            <input type="text" Disabled />
+            break;
+    }
+
+
+
+        </div>
+
+@code {
+    [Parameter] public string Caption { get; set; }
+    [Parameter] public object Value { get; set; }
+    [Parameter] public string PType { get; set; }
+    [Parameter] public EventCallback<object> ValueChanged { get; set; }
+
+    async void OnChange(ChangeEventArgs e)
+    {
+        await ValueChanged.InvokeAsync(e.Value);
+    }
+}

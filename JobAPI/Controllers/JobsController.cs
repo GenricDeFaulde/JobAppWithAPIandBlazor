@@ -52,6 +52,28 @@ namespace JobAPI.Controllers
             return job;
         }
 
+        // GET: Jobs/GetAll
+
+        [Authorize]
+        [HttpGet("GetAll")]
+        [SwaggerOperation("GetJob")]
+        [SwaggerResponse((int)HttpStatusCode.OK)]
+        [SwaggerResponse((int)HttpStatusCode.NotFound)]
+        public async Task<ActionResult<Job>> GetAll()
+        {
+
+            var job = await _context.JobsDB
+                .Include(i => i.JobData)
+                .Include(i => i.JobSkillz)
+                .ToListAsync();
+            if (job == null)
+            {
+                return NotFound();
+            }
+
+            return new JsonResult(job);
+        }
+
 
         // POST: Jobs/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 

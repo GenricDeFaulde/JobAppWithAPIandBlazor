@@ -53,6 +53,25 @@ namespace JobAPI.Controllers
         }
 
 
+        // GET: HeadHunters/Get/5
+        [Authorize]
+        [HttpGet("GetAll")]
+        [SwaggerOperation("GetHeadHunter")]
+        [SwaggerResponse((int)HttpStatusCode.OK)]
+        [SwaggerResponse((int)HttpStatusCode.NotFound)]
+        public async Task<ActionResult<HeadHunter>> GetAll()
+        {
+            
+            var headHunter = await _context.HeadHunter
+                .Include(i => i.ContactInfos)
+                .Include(i => i.Offers)
+                .ToListAsync();
+            
+
+            return new JsonResult(headHunter);
+        }
+
+
 
         // POST: HeadHunters/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 

@@ -6,15 +6,82 @@
             <AuthorizeView>
                 <Authorized>
 
+                    <GenericList Context="Companies" Elements="companies">
+                        <EmptyTemplate>
+                            <text>Nothing here</text>
+                        </EmptyTemplate>
+                        <WithElementsTemplate>
+                            <h2>Company Hub</h2>
+
+                            
+                                @foreach (var company in companies)
+                                {
+                                    <h3>@company.CompanyName</h3>
+                                    <p>@company.Description</p>
+                                    <h5>History:</h5>
+                                    @if (company.Histories is not null)
+                                    {
+                                        @foreach (var history in company.Histories)
+                                        {
+                                            <p>@history.Content</p>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <em>Nothing yet.</em>
+                                    }
+
+                                    <h5>Branches:</h5>
+                                    @if (company.Branches is not null)
+                                    {
+                                        @foreach (var branch in company.Branches)
+                                        {
+                                            <h4>@branch.Name</h4>
+                                            <p>@branch.Description</p>
+                                            <h5>Contacts:</h5>
+                                            @if (branch.Contacts is null)
+                                            {
+
+                                                <p>No contact data known</p>
+                                            }
+                                            else
+                                            {
+                                                @branch.Contacts;
+                                                var i = 1;
+                                                @foreach (var contact in branch.Contacts)
+                                                {
+                                                    <p>contact no @i</p>
+                                                    <p>@contact.PhoneNumber</p>
+                                                    <p>@contact.EmailAddress</p>
+                                                    i++;
+                                                }
+                                            }
+                                            <h5>Offers:</h5>
+
+                                            @if (branch.Offers is not null)
+                                            {
+                                                @foreach (var offer in branch.Offers)
+                                                {
+                                                    <p>@offer.JobOfferUrl</p>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <p>No offers</p>
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <p>No branch known.</p>
+                                    }
+                               
+                            }
+                        </WithElementsTemplate>
+                    </GenericList>
 
 
-
-
-
-
-
-
-                    <h2>Company Hub</h2>
+                    @*<h2>Company Hub</h2>
 
                     @if (companies is null)
                     {
@@ -91,7 +158,7 @@
                                 <p>No branch known.</p>
                             }
                         }
-                    }
+                    }*@
                 </Authorized>
 
 
@@ -105,7 +172,7 @@
 
 
     @code {
-        private Company[] companies;
+        public List<Company> companies;
 
         private string errorMessage = null;
 
@@ -113,7 +180,7 @@
         {
             try
             {
-                companies = await Http.GetFromJsonAsync<Company[]>("https://localhost:44372/Api/Companies/GetAll");
+                companies = await Http.GetFromJsonAsync<List<Company>>("https://localhost:44372/Api/Companies/GetAll");
             }
             catch (Exception exception)
             {

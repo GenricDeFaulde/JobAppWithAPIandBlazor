@@ -32,15 +32,17 @@ namespace JobAPI.Controllers
             _config = config;
         }
 
-        [HttpGet]
-        [Route("Users/Get")]
-        public UserModel GetById()
-        {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            UserData data = new UserData(_config);
+        //[HttpGet]
+        //[Route("Users/Get")]
+        //public UserModel GetById()
+        //{
+        //    string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    UserData data = new UserData(_config);
 
-            return data.GetUserById(userId).First();
-        }
+        //    return data.GetUserById(userId).First();
+        //}
+
+
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
@@ -67,6 +69,20 @@ namespace JobAPI.Controllers
 
                 output.Add(u);
             }
+            return output;
+        }
+
+
+        // !TODO change to stored procedure!
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        [Route("Users/GetAllAuthUsers")]
+        public List<JobAppUser> GetAllAuthUsers()
+        {
+            List<JobAppUser> output = new List<JobAppUser>();
+
+            output = _context.Users.ToList();
+            
             return output;
         }
 

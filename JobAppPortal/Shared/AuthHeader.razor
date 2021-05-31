@@ -1,5 +1,15 @@
 ﻿<AuthorizeView>
-    Hello, @context.User.FindFirst(ClaimTypes.Name).Value
+    <Authorized>
+        <h2 class="text-left" style="Flex:auto">
+            Hello, @context.User.FindFirst(ClaimTypes.Name).Value
+        </h2>
+        <NavLink class="nav-link" href="logout">
+            <span class="oi oi-account-logout" aria-hidden="true"></span> Log Out
+        </NavLink>
+    </Authorized>
+    <NotAuthorized>
+        <JobAppPortal.Pages.Login/>
+    </NotAuthorized>
 </AuthorizeView>
 
 @code {

@@ -1,0 +1,49 @@
+﻿@typeparam T
+
+
+@foreach (var property in Model.GetType().GetProperties())
+{
+<td>
+    <AutoFormItem Value="@property.GetValue(Model)"
+                  Caption="@property.Name"
+                  PType="@property.PropertyType.FullName.ToString()"
+                  ValueChanged="@((e)=>OnValueChanged(e,property.Name))" />
+</td>
+}
+
+
+@code{
+    [Parameter] public T Model { get; set; }
+    [Parameter] public EventCallback<T> ModelChanged { get; set; }
+
+    @*public Dictionary<string, object> Properties { get; set; } = new Dictionary<string, object>();*@
+
+    protected override void OnInitialized()
+    {
+        @*var propertiesFromModel = Model.GetType().GetProperties();
+        foreach (var propertyFromModel in propertiesFromModel)
+        {
+            Properties.Add(propertyFromModel.Name, propertyFromModel.GetValue(Model));
+        }*@
+    }
+
+    void OnValueChanged(object e, string prop)
+    {
+        var p = Model.GetType().GetProperty(prop);
+        if (p.PropertyType == typeof(int))
+        {
+            var intValue = Convert.ToInt32(e);
+            p.SetValue(Model, intValue);
+        }
+        if (p.PropertyType == typeof(string))
+        {
+            p.SetValue(Model, e.ToString());
+        }
+        if (p.PropertyType == typeof(bool))
+        {
+            p.SetValue(Model, e);
+        }
+
+        ModelChanged.InvokeAsync(Model);
+    }
+}

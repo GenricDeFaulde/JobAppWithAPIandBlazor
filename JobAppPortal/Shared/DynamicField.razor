@@ -1,0 +1,62 @@
+﻿<div>
+
+    @switch (PType)
+    {
+        case "System.String":
+            var sValue = (Value is not null) ? Value.ToString() : "";
+
+            if (@Caption == "ProfileId")
+            {
+                <div class="row border-bottom mt-2">
+                    <label class="col-lg-2 mb-0 p-0 d-flex align-items-end ">@Caption</label>
+                    <input class="col-lg-7 p-0" type="text" @onchange="OnChange" value="@sValue" placeholder="@Caption" disabled />
+                </div>
+            }
+            else
+            {
+                <div class="row border-bottom mt-2">
+                    <label class="col-lg-2 mb-0 p-0 d-flex align-items-end">@Caption</label>
+                    <input class="col-lg-7 p-0" type="text" @onchange="OnChange" value="@sValue" placeholder="@Caption" />
+                </div>
+            }
+
+            break;
+        case "System.Boolean":
+            <div class="row border-bottom mt-2">
+                <label class="col-lg-2 mb-0 p-0 d-flex align-items-end">@Caption</label>
+                <div class="col-lg-7 p-0">
+                    <input type="checkbox" checked="@Value" @onchange="OnChange" />
+                </div>
+            </div>
+            break;
+        case "System.Int32":
+            if (@Caption == "Id")
+            {
+
+            }
+            else
+            {
+                <div class="row border-bottom mt-2">
+                    <label class="col-lg-2 mb-0 p-0 d-flex align-items-end">@Caption</label>
+                    <input class="col-lg-7 p-0" type="number" value="@Value" @onchange="OnChange" />
+                </div>
+            }
+            break;
+        default: /*Unsuported/Not implemented editing*/
+
+            break;
+    }
+
+</div>
+
+@code {
+    [Parameter] public string Caption { get; set; }
+    [Parameter] public object Value { get; set; }
+    [Parameter] public string PType { get; set; }
+    [Parameter] public EventCallback<object> ValueChanged { get; set; }
+
+    async void OnChange(ChangeEventArgs e)
+    {
+        await ValueChanged.InvokeAsync(e.Value);
+    }
+}
