@@ -32,7 +32,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("GetUserContactData")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<UserContactData>> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -46,7 +46,7 @@ namespace JobAPI.Controllers
                 return NotFound();
             }
 
-            return userContactData;
+            return new JsonResult(userContactData);
         }
 
 
@@ -60,16 +60,16 @@ namespace JobAPI.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.Created)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserContactData>> Create([Bind("Id,UserId,AddressNation,AddressCity,AddressStreet,AddressState,PhoneNumber,PhoneNumberAlt,EmailAddress,EmailAddressAlt,Current")] UserContactData userContactData)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,UserId,AddressNation,AddressCity,AddressStreet,AddressState,PhoneNumber,PhoneNumberAlt,EmailAddress,EmailAddressAlt,Current")] UserContactData userContactData)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(userContactData);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return userContactData;
+            return new JsonResult(userContactData);
         }
 
 
@@ -82,8 +82,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("EditUserContactData")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserContactData>> Edit(int id, [Bind("Id,UserId,AddressNation,AddressCity,AddressStreet,AddressState,PhoneNumber,PhoneNumberAlt,EmailAddress,EmailAddressAlt,Current")] UserContactData userContactData)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,AddressNation,AddressCity,AddressStreet,AddressState,PhoneNumber,PhoneNumberAlt,EmailAddress,EmailAddressAlt,Current")] UserContactData userContactData)
         {
             if (id != userContactData.Id)
             {
@@ -108,9 +108,9 @@ namespace JobAPI.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return userContactData;
+            return new JsonResult(userContactData);
         }
 
 
@@ -120,8 +120,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("DeleteUserContactData")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserContactData>> DeleteConfirmed(int id)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var userContactData = await _context.UserContactDatasDB.FindAsync(id);
             _context.UserContactDatasDB.Remove(userContactData);

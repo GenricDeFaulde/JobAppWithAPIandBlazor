@@ -1,6 +1,4 @@
 ﻿@page "/Admin"
-@inject NavigationManager NavManager
-@inject HttpClient Http
 
 
 
@@ -11,16 +9,33 @@
                 <div class="col-lg-6 mb-0 p-0">
                     <h1 class="mb-0 ">Usermanager</h1>
                 </div>
+
+                @if (showModal)
+                {
+                    <div class="modal fade show" tabindex="-1" role="dialog" style="        display: block;
+                            background-color: rgba(255,255,255,0.7);">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Info</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                                            @onclick="@(() => { showModal = false; })">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>@infoMessage</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <hr />
+
                 @if (users is null)
                 {
-                    @if (errorMessage is not null)
-                    {
-                        <p><em>@errorMessage</em></p>
-                    }
-                    else
-                    {
-                        <p><em>Loading Data...</em></p>
-                    }
+
+                    <p><em>Loading Data...</em></p>
                 }
                 else
                 {
@@ -28,15 +43,15 @@
                         <Dropdown TItem="string" OnSelected="@OnUserSelected">
                             <InitialTip>Select a User</InitialTip>
                             <ChildContent>
-                                @foreach (var user in users)
-                                {
-                                    <DropdownListItem Item="@user.ProfileId.ToString()"> @user.FirstName @user.LastName</DropdownListItem>
-                                }
                                 @foreach (var appUser in appUsers)
                                 {
                                     if (!users.Any(u => u.ProfileId == appUser.Id.ToString()))
                                     {
                                         <DropdownListItem Item="@appUser.Id">New from: @appUser.UserName</DropdownListItem>
+                                    }
+                                    else
+                                    {
+                                        <DropdownListItem Item="@appUser.Id"> @appUser.UserName</DropdownListItem>
                                     }
                                 }
                             </ChildContent>
@@ -46,7 +61,7 @@
             </div>
             @if (detailUser != "0")
             {
-                <EditForm Model="_editUser" Context="NewProfile" OnValidSubmit="@UpdateUser">
+                <EditForm Model="_editUser" Context="NewProfile" OnValidSubmit="@SaveUser">
                     <DataAnnotationsValidator />
 
                     <DynamicForm @bind-Model="_editUser">
@@ -68,328 +83,6 @@
 
 @code {
 
-    // fields and variables
-
-    private User[] users;
-    private List<User> usersList;
-    EditUserModel _editUser;
-    private UserRole[] userRoles;
-    private AppUser[] appUsers;
-    private Dictionary<string, string> roles { get; set; } = new Dictionary<string, string>();
-
-    private string errorMessage = null;
-
-    private string detailUser = "0";
-
-    // initializing
-
-    protected override async Task OnInitializedAsync()
-    {
-#if DEBUG
-@*await Task.Delay(10000);*@
-#endif
-        try
-        {
-            users = await Http.GetFromJsonAsync<User[]>("https://localhost:44372/Api/Users/GetAll");
-            userRoles = await Http.GetFromJsonAsync<UserRole[]>("https://localhost:44372/Api/_Admin/Users/GetAllUsers");
-            roles = await Http.GetFromJsonAsync<Dictionary<string, string>>("https://localhost:44372/api/_Admin/Users/GetAllRoles");
-            appUsers = await Http.GetFromJsonAsync<AppUser[]>("https://localhost:44372/api/_Admin/Users/GetAllAuthUsers");
-            usersList = users.ToList();
-        }
-        catch (Exception exception)
-        {
-            errorMessage = exception.ToString();
-            NavManager.NavigateTo("/logout");
-        }
-    }
-
-
-    // Methods
-
-    private void OnUserSelected(string selection)
-    {
-        detailUser = selection;
-        PropagateEditUserFormFromAuthProfile(selection);
-    }
-
-    private void PropagateEditUserFormFromAuthProfile(string selection)
-    {
-        _editUser = new EditUserModel();
-
-        AppUser appUser = appUsers.FirstOrDefault(x => x.Id == selection);
-        User user = users.FirstOrDefault(x => x.ProfileId == selection);
-        Dictionary<string, string> appUserRoles = userRoles.FirstOrDefault(r => r.Id == selection).Roles;
-
-        _editUser.UserName = appUser.UserName;
-        _editUser.FirstName = appUser.FirstName;
-        _editUser.LastName = appUser.LastName;
-        _editUser.ProfileId = appUser.Id;
-        _editUser.Email = appUser.Email;
-        _editUser.IsAdmin = appUserRoles.ContainsValue("Admin");
-        _editUser.IsSuperAdmin = appUserRoles.ContainsValue("SuperAdmin");
-        _editUser.IsModerator = appUserRoles.ContainsValue("Moderator");
-        _editUser.Roles = appUserRoles;
-        _editUser.Id = 0;
-
-        if(user != null)
-        {
-            _editUser.BirthDate = user.BirthDate;
-            _editUser.Gender = user.Gender;
-            _editUser.Nationality = user.Nationality;
-            _editUser.Nationality2 = user.Nationality2;
-            _editUser.Religion = user.Religion;
-            _editUser.Sex = user.Sex;
-            _editUser.Id = user.Id;
-        }
-
-    }
-
-
-    private void OnProfileSelected(string selection)
-    {
-        detailUser = selection;
-    }
-
-
-    private void UpdateUser()
-    {
-        // creating json objects
-        var outputUser = new User
-        {
-            Id = _editUser.Id,
-            ProfileId = _editUser.ProfileId,
-            FirstName = _editUser.FirstName,
-            LastName = _editUser.LastName,
-            BirthDate = _editUser.BirthDate,
-            Religion = _editUser.Religion,
-            Sex = _editUser.Sex,
-            Gender = _editUser.Gender,
-            Nationality = _editUser.Nationality,
-            Nationality2 = _editUser.Nationality2
-        };
-
-        var outputAppUser = new AppUser
-        {
-            Id = _editUser.ProfileId,
-            FirstName = _editUser.FirstName,
-            LastName = _editUser.LastName,
-            UserName = _editUser.UserName,
-            Email = _editUser.Email
-        };
-
-        var outputRoles = new UserRole
-        {
-            Id = _editUser.ProfileId,
-            UserName = _editUser.UserName,
-            Email = _editUser.Email,
-            Roles = new Dictionary<string, string>()
-            {
-                {"e8df7710-8d8d-41aa-94db-8b04248407e7", "Basic" }
-            }
-        };
-
-
-
-        @if (_editUser.IsAdmin)
-        {
-            outputRoles.Roles.Add("3ccb1c2f-4571-4be4-8f54-753b886b94ac", "Admin");
-        }
-
-        @if (_editUser.IsSuperAdmin)
-        {
-            outputRoles.Roles.Add("4a87fa22-f9b1-411a-9e2b-2896f44d5ade", "SuperAdmin");
-
-        }
-
-        @if (_editUser.IsModerator)
-        {
-            outputRoles.Roles.Add("b47c1af6-667d-44e7-8d80-dec1f322f600", "Moderator");
-        }
-
-
-        // creating new user if needed
-        @if (_editUser.Id == 0)
-        {
-
-        }
-
-        // adding or removing roles
-        //...
-        @if(_editUser.Id != 0)
-            {
-
-            }
-        //...
-
-
-        // calling update/create on API
-        // ...
-        // ...
-
-
-
-        GetPropertyValues(_editUser);
-
-        Console.WriteLine("Done!");
-    }
-
-    private static void GetPropertyValues(Object obj)
-    {
-        Type t = obj.GetType();
-        Console.WriteLine("Type is: {0}", t.Name);
-        var props = t.GetProperties();
-        Console.WriteLine("Properties (N = {0}):",
-                          props.Length);
-        foreach (var prop in props)
-            if (prop.GetIndexParameters().Length == 0)
-                Console.WriteLine("   {0} ({1}): {2}", prop.Name,
-                                  prop.PropertyType.Name,
-                                  prop.GetValue(obj));
-            else
-                Console.WriteLine("   {0} ({1}): <Indexed>", prop.Name,
-                                  prop.PropertyType.Name);
-    }
-
-
-    // classes
-    #region classes
-    public class User
-    {
-        public int Id { get; set; }
-        public string ProfileId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string BirthDate { get; set; }
-        public string Religion { get; set; }
-        public string Sex { get; set; }
-        public string Gender { get; set; }
-        public string Nationality { get; set; }
-        public string Nationality2 { get; set; }
-        public byte[] Picture { get; set; }
-        public byte[] PictureAlt { get; set; }
-
-        public virtual UserContactData ContactData { get; set; }
-        public virtual ICollection<UserEducation> EducationHistory { get; set; }
-        public virtual ICollection<UserJobHistory> JobHistory { get; set; }
-        public virtual ICollection<UserSkill> Skills { get; set; }
-        public virtual ICollection<UserWebsite> Websites { get; set; }
-        public virtual ICollection<Application> Applications { get; set; }
-        public virtual ICollection<Jobsuche> JobsGesucht { get; set; }
-    }
-
-    public class UserContactData
-    {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public string AddressNation { get; set; }
-        public string AddressCity { get; set; }
-        public string AddressStreet { get; set; }
-        public string AddressState { get; set; }
-        public string PhoneNumber { get; set; }
-        public string PhoneNumberAlt { get; set; }
-        public string EmailAddress { get; set; }
-        public string EmailAddressAlt { get; set; }
-        public bool Current { get; set; }
-    }
-
-    public class UserEducation
-    {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public string Title { get; set; }
-        public string Facility { get; set; }
-        public string FacilityAddressCity { get; set; }
-        public string FacilityAddressStreet { get; set; }
-        public string FacilityAddressState { get; set; }
-        public string Graduation { get; set; }
-        public string TestimonyUrl { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-    }
-
-    public class UserJobHistory
-    {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public string Title { get; set; }
-        public string Descritpion { get; set; }
-        public string SkillSummary { get; set; }
-        public string TestimonyUrl { get; set; }
-        public decimal Salary { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public bool Current { get; set; }
-    }
-
-    public class UserSkill
-    {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public string SkillName { get; set; }
-        public string SkillDescription { get; set; }
-        public string SselfRating { get; set; }
-        public bool Current { get; set; }
-    }
-
-    public class UserWebsite
-    {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public string Name { get; set; }
-        public string Content { get; set; }
-        public string Url { get; set; }
-    }
-
-    public class Application
-    {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public int? JobOfferId { get; set; }
-        public string Title { get; set; }
-        public string Answer { get; set; }
-        public DateTime DateSent { get; set; }
-        public DateTime DateAnswered { get; set; }
-    }
-
-    public class Jobsuche
-    {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public int JobOfferId { get; set; }
-        public int? CompanyId { get; set; }
-        public string Email { get; set; }
-        public int JobId { get; set; }
-        public string Status { get; set; }
-        public DateTime DateSent { get; set; }
-        public DateTime DateAnswered { get; set; }
-        public byte[] Proof { get; set; }
-    }
-
-    public class UserRole
-    {
-        public string Id { get; set; }
-        public string Email { get; set; }
-        public string UserName { get; set; }
-        public Dictionary<string, string> Roles { get; set; }
-    }
-
-    public class AppUser
-    {
-        public string Id { get; set; }
-        public string UserName { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string PhoneNumber { get; set; }
-        public bool IsAdmin { get; set; }
-        public string AuthId { get; set; }
-    }
-
-    public class Role
-    {
-        public string Key { get; set; }
-        public string Value { get; set; }
-    }
-    #endregion
+   
 
 }

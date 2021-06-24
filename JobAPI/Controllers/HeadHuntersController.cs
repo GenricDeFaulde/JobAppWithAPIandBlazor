@@ -33,7 +33,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("GetHeadHunter")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<HeadHunter>> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -49,7 +49,7 @@ namespace JobAPI.Controllers
                 return NotFound();
             }
 
-            return headHunter;
+            return new JsonResult(headHunter);
         }
 
 
@@ -59,7 +59,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("GetHeadHunter")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<HeadHunter>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
             
             var headHunter = await _context.HeadHunter
@@ -82,16 +82,16 @@ namespace JobAPI.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.Created)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<HeadHunter>> Create([Bind("Id,FirstName,LastName,IsActive")] HeadHunter headHunter)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,IsActive")] HeadHunter headHunter)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(headHunter);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return headHunter;
+            return new JsonResult(headHunter);
         }
 
 
@@ -105,8 +105,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("EditHeadHunter")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<HeadHunter>> Edit(int id, [Bind("Id,FirstName,LastName,IsActive")] HeadHunter headHunter)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,IsActive")] HeadHunter headHunter)
         {
             if (id != headHunter.Id)
             {
@@ -131,9 +131,9 @@ namespace JobAPI.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return headHunter;
+            return new JsonResult(headHunter);
         }
 
 
@@ -145,8 +145,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("DeleteHeadHunter")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<HeadHunter>> DeleteConfirmed(int id)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var headHunter = await _context.HeadHunter.FindAsync(id);
             _context.HeadHunter.Remove(headHunter);

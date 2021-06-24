@@ -33,7 +33,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("GetUserEducation")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<UserEducation>> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -47,7 +47,7 @@ namespace JobAPI.Controllers
                 return NotFound();
             }
 
-            return userEducation;
+            return new JsonResult(userEducation);
         }
 
 
@@ -61,16 +61,16 @@ namespace JobAPI.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.Created)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserEducation>> Create([Bind("Id,UserId,Title,Facility,AddressNation,FacilityAddressCity,FacilityAddressStreet,FacilityAddressState,Graduation,TestimonyUrl,StartDate,EndDate")] UserEducation userEducation)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,UserId,Title,Facility,AddressNation,FacilityAddressCity,FacilityAddressStreet,FacilityAddressState,Graduation,TestimonyUrl,StartDate,EndDate")] UserEducation userEducation)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(userEducation);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return userEducation;
+            return new JsonResult(userEducation);
         }
 
 
@@ -83,8 +83,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("EditUserEducation")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserEducation>> Edit(int id, [Bind("Id,UserId,Title,Facility,AddressNation,FacilityAddressCity,FacilityAddressStreet,FacilityAddressState,Graduation,TestimonyUrl,StartDate,EndDate")] UserEducation userEducation)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,Title,Facility,AddressNation,FacilityAddressCity,FacilityAddressStreet,FacilityAddressState,Graduation,TestimonyUrl,StartDate,EndDate")] UserEducation userEducation)
         {
             if (id != userEducation.Id)
             {
@@ -109,9 +109,9 @@ namespace JobAPI.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return userEducation;
+            return new JsonResult(userEducation);
         }
 
 
@@ -121,8 +121,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("DeleteUserEducation")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserEducation>> DeleteConfirmed(int id)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var userEducation = await _context.UserEducationsDB.FindAsync(id);
             _context.UserEducationsDB.Remove(userEducation);

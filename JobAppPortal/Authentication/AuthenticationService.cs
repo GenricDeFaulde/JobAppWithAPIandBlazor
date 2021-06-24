@@ -52,6 +52,7 @@ namespace JobAppPortal.Authentication
             var result = JsonSerializer.Deserialize<AuthenticatedUserModel>(authContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             await _localStorage.SetItemAsync("authTokenStorageKey", result.Access_Token);
+            await _localStorage.SetItemAsync("authenticatedUserId", result.Id);
 
             ((AuthStateProvider)_authStateProvider).NotifyUserAuthentication(result.Access_Token);
 

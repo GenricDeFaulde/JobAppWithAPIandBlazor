@@ -1,7 +1,9 @@
-﻿using JobAPI.Data;
+﻿using JobAPI.Areas.Identity.Data;
+using JobAPI.Data;
 using JobAPI.Models.UserModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
@@ -19,10 +21,13 @@ namespace JobAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly JobDbContext _context;
+        private readonly UserManager<JobAppUser> _userManager;
 
-        public UsersController(JobDbContext context)
+        public UsersController(JobDbContext context,
+            UserManager<JobAppUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Users/GetAll
@@ -31,7 +36,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("GetAllUsers")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<User>> Details()
+        public async Task<IActionResult> Details()
         {
 
             var user = await _context.UserDB
@@ -52,7 +57,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("GetUser")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<User>> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -66,47 +71,83 @@ namespace JobAPI.Controllers
                 return NotFound();
             }
 
-            return user;
+            return new JsonResult(user);
+        }
+
+        public record UserRegistrationModel(
+            string FirstName,
+            string LastName,
+            string Email,
+            string Password);
+
+        // POST: Users/Register
+        [AllowAnonymous]
+        [HttpPost, Route("Register")]
+        [SwaggerOperation("RegisterUser")]
+        [SwaggerResponse((int)HttpStatusCode.OK)]
+        [SwaggerResponse((int)HttpStatusCode.NotFound)]
+        [SwaggerResponse((int)HttpStatusCode.Created)]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(UserRegistrationModel user)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingUser = await _userManager.FindByEmailAsync(user.Email);
+                if(existingUser is null)
+                {
+                    JobAppUser newUser = new()
+                    {
+                        Email = user.Email,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        EmailConfirmed = true,
+                        UserName = user.Email
+                    };
+
+                    IdentityResult result = await _userManager.CreateAsync(newUser, user.Password);
+
+                    if (result.Succeeded) return Ok();
+                }
+            }
+            return BadRequest("Model is not matching");
         }
 
 
         // POST: Users/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "SuperAdmin")]
-        [HttpPost("Create")]
+        [Authorize(Roles = "Admin")]
+        [HttpPost, Route("Create")]
         [SwaggerOperation("CreateUser")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.Created)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<User>> Create([Bind("Id,FirstName,LastName,BirthDate,Religion,Sex,Gender,Picture,PictureAlt,Nationality,Nationality2")] User user)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create( User user)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + user.Id, user);
             }
-            return user;
+            return BadRequest("Model is not matching");
         }
 
 
 
         // PUT: Users/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("Edit/{id}")]
         [SwaggerOperation("EditUser")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<User>> Edit(int id, [Bind("Id,FirstName,LastName,BirthDate,Religion,Sex,Gender,Picture,PictureAlt,Nationality,Nationality2")] User user)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, User user)
         {
+            //TODO: add roles
+
             if (id != user.Id)
             {
-                return NotFound();
+                return BadRequest("Id not matching");
             }
 
             if (ModelState.IsValid)
@@ -120,16 +161,16 @@ namespace JobAPI.Controllers
                 {
                     if (!UserExists(user.Id))
                     {
-                        return NotFound();
+                        return NotFound("No user with this id in database");
                     }
                     else
                     {
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Ok($"User {user.FirstName} {user.LastName} was succesfully edited");
             }
-            return user;
+            return BadRequest("Bad model");
         }
 
 
@@ -140,8 +181,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("DeleteUser")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<User>> DeleteConfirmed(int id)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var user = await _context.UserDB.FindAsync(id);
             _context.UserDB.Remove(user);

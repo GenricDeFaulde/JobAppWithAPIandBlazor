@@ -31,7 +31,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("GetAllJobExchanges")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<JobExchange>> GetExchanges()
+        public async Task<IActionResult> GetExchanges()
         {
 
             var jobExchange = await _context.JobExchangesDB
@@ -60,7 +60,7 @@ namespace JobAPI.Controllers
             [SwaggerOperation("GetJobExchange")]
             [SwaggerResponse((int)HttpStatusCode.OK)]
             [SwaggerResponse((int)HttpStatusCode.NotFound)]
-             public async Task<ActionResult<JobExchange>> Details(int? id)
+             public async Task<IActionResult> Details(int? id)
             {
                 if (id == null)
                 {
@@ -83,7 +83,7 @@ namespace JobAPI.Controllers
                     return NotFound();
                 }
 
-                return jobExchange;
+                return new JsonResult(jobExchange);
             }
 
 
@@ -96,8 +96,8 @@ namespace JobAPI.Controllers
             [SwaggerResponse((int)HttpStatusCode.OK)]
             [SwaggerResponse((int)HttpStatusCode.NotFound)]
             [SwaggerResponse((int)HttpStatusCode.Created)]
-            [ValidateAntiForgeryToken]
-            public async Task<ActionResult<JobExchange>> Create([Bind("Id,Name,Url,Current")] JobExchange jobExchange)
+    //[ValidateAntiForgeryToken]
+            public async Task<IActionResult> Create([Bind("Id,Name,Url,Current")] JobExchange jobExchange)
             {
                 if (ModelState.IsValid)
                 {
@@ -105,7 +105,7 @@ namespace JobAPI.Controllers
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
-                return jobExchange;
+                return new JsonResult(jobExchange);
             }
 
 
@@ -119,8 +119,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("EditJobExchange")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-            public async Task<ActionResult<JobExchange>> Edit(int id, [Bind("Id,Name,Url,Current")] JobExchange jobExchange)
+//[ValidateAntiForgeryToken]
+            public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Url,Current")] JobExchange jobExchange)
             {
                 if (id != jobExchange.Id)
                 {
@@ -145,9 +145,9 @@ namespace JobAPI.Controllers
                             throw;
                         }
                     }
-                    return RedirectToAction(nameof(Index));
+                    return Ok();
                 }
-                return jobExchange;
+                return new JsonResult(jobExchange);
             }
 
 
@@ -158,8 +158,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("DeleteJobExchange")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-            public async Task<ActionResult<JobExchange>> DeleteConfirmed(int id)
+//[ValidateAntiForgeryToken]
+            public async Task<IActionResult> DeleteConfirmed(int id)
             {
                 var jobExchange = await _context.JobExchangesDB.FindAsync(id);
                 _context.JobExchangesDB.Remove(jobExchange);

@@ -46,7 +46,6 @@ namespace JobAPI.Models.UserModel
         /// <summary>
         /// Required, Max length = 20
         /// </summary>
-        [Required]
         [MaxLength(20)]
         [StringLength(20)]
         public string BirthDate { get; set; }
@@ -104,7 +103,7 @@ namespace JobAPI.Models.UserModel
         /// <summary>
         /// summary
         /// </summary>
-        public virtual global::JobAPI.Models.UserModel.UserContactData ContactData { get; set; }
+        public virtual global::JobAPI.Models.UserModel.UserContactData ContactData { get; protected set; }
 
         /// <summary>
         /// user deletes educationhistory

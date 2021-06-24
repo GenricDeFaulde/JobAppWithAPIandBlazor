@@ -9,7 +9,7 @@
             {
                 <div class="row border-bottom mt-2">
                     <label class="col-lg-2 mb-0 p-0 d-flex align-items-end ">@Caption</label>
-                    <input class="col-lg-7 p-0" type="text" @onchange="OnChange" value="@sValue" placeholder="@Caption" disabled />
+                    <input class="col-lg-7 p-0" type="text" value="@sValue" placeholder="@Caption" disabled />
                 </div>
             }
             else
@@ -32,7 +32,10 @@
         case "System.Int32":
             if (@Caption == "Id")
             {
-
+                <div class="row border-bottom mt-2">
+                    <label class="col-lg-2 mb-0 p-0 d-flex align-items-end ">@Caption</label>
+                    <input class="col-lg-7 p-0" type="text" value="@Value" placeholder="@Caption" disabled />
+                </div>
             }
             else
             {

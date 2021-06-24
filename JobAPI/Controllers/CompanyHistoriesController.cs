@@ -31,7 +31,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("GetCompanyHistory")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<CompanyHistory>> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -45,7 +45,7 @@ namespace JobAPI.Controllers
                 return NotFound();
             }
 
-            return companyHistory;
+            return new JsonResult(companyHistory);
         }
 
 
@@ -58,16 +58,16 @@ namespace JobAPI.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.Created)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<CompanyHistory>> Create([Bind("Id,CompanyId,Name,Content,Date")] CompanyHistory companyHistory)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,CompanyId,Name,Content,Date")] CompanyHistory companyHistory)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(companyHistory);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return companyHistory;
+            return new JsonResult(companyHistory);
         }
 
 
@@ -79,8 +79,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("EditCompanyHistory")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<CompanyHistory>> Edit(int id, [Bind("Id,CompanyId,Name,Content,Date")] CompanyHistory companyHistory)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyId,Name,Content,Date")] CompanyHistory companyHistory)
         {
             if (id != companyHistory.Id)
             {
@@ -105,9 +105,9 @@ namespace JobAPI.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return companyHistory;
+            return new JsonResult(companyHistory);
         }
 
 
@@ -117,8 +117,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("DeleteCompanyHistory")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<CompanyHistory>> DeleteConfirmed(int id)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var companyHistory = await _context.CompanyHistoriesDB.FindAsync(id);
             _context.CompanyHistoriesDB.Remove(companyHistory);

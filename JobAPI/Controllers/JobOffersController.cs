@@ -31,7 +31,7 @@ namespace JobAPI.Controllers
         //  TODO Make this work for dotnet 5.0 
         //// GET: JobOffers by company
         //[Authorize]
-        //public async Task<ActionResult<JobOffer>> CompanyIndex(int id)
+        //public async Task<IActionResult> CompanyIndex(int id)
         //{
         //    //  TODO implement ApplicationCount
 
@@ -57,7 +57,7 @@ namespace JobAPI.Controllers
 
         //// GET: JobOffers by Job
         //[Authorize]
-        //public async Task<ActionResult<JobOffer>> JobIndex(int id)
+        //public async Task<IActionResult> JobIndex(int id)
         //{
 
         //    var offerInfo = await _context.JobsDB
@@ -82,7 +82,7 @@ namespace JobAPI.Controllers
 
         //// GET: JobOffers by exchange
         //[Authorize]
-        //public async Task<ActionResult<JobOffer>> ExchangeIndex(int? id)
+        //public async Task<IActionResult> ExchangeIndex(int? id)
         //{
         //    if (id == null)
         //    {
@@ -111,7 +111,7 @@ namespace JobAPI.Controllers
 
         //// GET: Jobs by Headhunter
         //[Authorize]
-        //public async Task<ActionResult<JobOffer>> HunterIndex(int? id)
+        //public async Task<IActionResult> HunterIndex(int? id)
         //{
         //    if (id == null)
         //    {
@@ -144,7 +144,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("GetJobOffer")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<JobOffer>> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -165,7 +165,7 @@ namespace JobAPI.Controllers
                 return NotFound();
             }
 
-            return jobOffer;
+            return new JsonResult(jobOffer);
         }
 
 
@@ -178,16 +178,16 @@ namespace JobAPI.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.Created)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<JobOffer>> Create([Bind("Id,CompanyBranchId,JobId,HeadHunterId,JobExchangeId,ApplicationnId,SalaryOffered,IsActive,Releasedate,JobOfferUrl")] JobOffer jobOffer)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,CompanyBranchId,JobId,HeadHunterId,JobExchangeId,ApplicationnId,SalaryOffered,IsActive,Releasedate,JobOfferUrl")] JobOffer jobOffer)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(jobOffer);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return jobOffer;
+            return new JsonResult(jobOffer);
         }
 
 
@@ -200,8 +200,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("EditJobOffer")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<JobOffer>> Edit(int id, [Bind("Id,CompanyBranchId,JobId,HeadHunterId,JobExchangeId,ApplicationnId,SalaryOffered,IsActive,Releasedate,JobOfferUrl")] JobOffer jobOffer)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyBranchId,JobId,HeadHunterId,JobExchangeId,ApplicationnId,SalaryOffered,IsActive,Releasedate,JobOfferUrl")] JobOffer jobOffer)
         {
             if (id != jobOffer.Id)
             {
@@ -226,9 +226,9 @@ namespace JobAPI.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return jobOffer;
+            return new JsonResult(jobOffer);
         }
 
 
@@ -240,8 +240,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("DeleteJobOffer")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<JobOffer>> DeleteConfirmed(int id)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var jobOffer = await _context.JobOffersDB.FindAsync(id);
             _context.JobOffersDB.Remove(jobOffer);

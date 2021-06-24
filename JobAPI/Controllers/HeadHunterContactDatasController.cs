@@ -34,7 +34,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("GetHeadHunterContactData")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<HeadHunterContactData>> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -48,7 +48,7 @@ namespace JobAPI.Controllers
                 return NotFound();
             }
 
-            return headHunterContactData;
+            return new JsonResult(headHunterContactData);
         }
 
 
@@ -62,16 +62,16 @@ namespace JobAPI.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.Created)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<HeadHunterContactData>> Create([Bind("Id,CompanyId,JobExchangeId,AddressNation,AddressCity,AddressStreet,AddressState,PhoneNumber,PhoneNumberAlt,EmailAddress,IsActive")] HeadHunterContactData headHunterContactData)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,CompanyId,JobExchangeId,AddressNation,AddressCity,AddressStreet,AddressState,PhoneNumber,PhoneNumberAlt,EmailAddress,IsActive")] HeadHunterContactData headHunterContactData)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(headHunterContactData);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return headHunterContactData;
+            return new JsonResult(headHunterContactData);
         }
 
 
@@ -83,8 +83,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("EditHeadHunterContactData")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<HeadHunterContactData>> Edit(int id, [Bind("Id,CompanyId,JobExchangeId,AddressNation,AddressCity,AddressStreet,AddressState,PhoneNumber,PhoneNumberAlt,EmailAddress,IsActive")] HeadHunterContactData headHunterContactData)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyId,JobExchangeId,AddressNation,AddressCity,AddressStreet,AddressState,PhoneNumber,PhoneNumberAlt,EmailAddress,IsActive")] HeadHunterContactData headHunterContactData)
         {
             if (id != headHunterContactData.Id)
             {
@@ -109,9 +109,9 @@ namespace JobAPI.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return headHunterContactData;
+            return new JsonResult(headHunterContactData);
         }
 
 
@@ -123,8 +123,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("DeleteHeadHunterContactData")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<HeadHunterContactData>> DeleteConfirmed(int id)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var headHunterContactData = await _context.HHContactDatas.FindAsync(id);
             _context.HHContactDatas.Remove(headHunterContactData);

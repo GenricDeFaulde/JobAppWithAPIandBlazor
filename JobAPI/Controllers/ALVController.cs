@@ -62,7 +62,7 @@ namespace JobAPI.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.Created)]
-        [ValidateAntiForgeryToken]
+//[ValidateAntiForgeryToken]
         public async Task<ActionResult<Jobsuche>> Create([Bind("Id,UserId,JobOfferId,CompanyId,Email,JobId,Status,DateSent,DateAnswered,Proof")] Jobsuche jobsuche)
         {
             if (ModelState.IsValid)
@@ -85,7 +85,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("EditJobsearch")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
+//[ValidateAntiForgeryToken]
         public async Task<ActionResult<Jobsuche>> Edit(int id, [Bind("Id,UserId,JobOfferId,CompanyId,Email,JobId,Status,DateSent,DateAnswered,Proof")] Jobsuche jobsuche)
         {
             if (id != jobsuche.Id)
@@ -123,7 +123,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("DeleteJobsearch")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
+//[ValidateAntiForgeryToken]
         public async Task<ActionResult<Jobsuche>> DeleteConfirmed(int id)
         {
             var jobsuche = await _context.ALVDB.FindAsync(id);

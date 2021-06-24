@@ -1,24 +1,23 @@
 ﻿@page "/Company"
-@inject NavigationManager NavManager
-@inject HttpClient Http
 
 @*AUTHORIZED*@
             <AuthorizeView>
                 <Authorized>
 
                     <GenericList Context="Companies" Elements="companies">
+                        <LoadMessage>I got a bad feeling about this...</LoadMessage>
                         <EmptyTemplate>
                             <text>Nothing here</text>
                         </EmptyTemplate>
                         <WithElementsTemplate>
-                            <h2>Company Hub</h2>
+                            <h1>Company Hub</h1>
 
                             
                                 @foreach (var company in companies)
                                 {
-                                    <h3>@company.CompanyName</h3>
+                                    <h2>@company.CompanyName</h2>
                                     <p>@company.Description</p>
-                                    <h5>History:</h5>
+                                    <h3>History:</h3>
                                     @if (company.Histories is not null)
                                     {
                                         @foreach (var history in company.Histories)
@@ -31,7 +30,7 @@
                                         <em>Nothing yet.</em>
                                     }
 
-                                    <h5>Branches:</h5>
+                                    <h3>Branches:</h3>
                                     @if (company.Branches is not null)
                                     {
                                         @foreach (var branch in company.Branches)
@@ -39,30 +38,29 @@
                                             <h4>@branch.Name</h4>
                                             <p>@branch.Description</p>
                                             <h5>Contacts:</h5>
-                                            @if (branch.Contacts is null)
+                                            @if (branch.Contacts.Count() is 0)
                                             {
 
                                                 <p>No contact data known</p>
                                             }
                                             else
                                             {
-                                                @branch.Contacts;
-                                                var i = 1;
+                                                <p>Number of Contacts: @branch.Contacts.Count()</p>
                                                 @foreach (var contact in branch.Contacts)
                                                 {
-                                                    <p>contact no @i</p>
+                                                    <p>-------</p>
                                                     <p>@contact.PhoneNumber</p>
                                                     <p>@contact.EmailAddress</p>
-                                                    i++;
                                                 }
                                             }
-                                            <h5>Offers:</h5>
+                                            <h3>Offers:</h3>
 
-                                            @if (branch.Offers is not null)
+                                            @if (branch.Offers.Count() is not 0)
                                             {
+                                                <p>Number of offers: @branch.Offers.Count()</p>
                                                 @foreach (var offer in branch.Offers)
                                                 {
-                                                    <p>@offer.JobOfferUrl</p>
+                                                    <p>Offer: @offer.JobOfferUrl</p>
                                                 }
                                             }
                                             else
@@ -172,85 +170,5 @@
 
 
     @code {
-        public List<Company> companies;
-
-        private string errorMessage = null;
-
-        protected override async Task OnInitializedAsync()
-        {
-            try
-            {
-                companies = await Http.GetFromJsonAsync<List<Company>>("https://localhost:44372/Api/Companies/GetAll");
-            }
-            catch (Exception exception)
-            {
-                errorMessage = exception.ToString();
-            }
-
-        }
-
-
-        public class Company
-        {
-            public int Id { get; set; }
-
-            public string CompanyName { get; set; }
-
-            public bool Current { get; set; }
-
-            public string Description { get; set; }
-
-            public List<Branch> Branches { get; set; }
-
-            public List<History> Histories { get; set; }
-        }
-
-
-        public class Branch
-        {
-            public int Id { get; set; }
-            public int CompanyId { get; set; }
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public string AddressNation { get; set; }
-            public string AddressStreet { get; set; }
-            public string AddressState { get; set; }
-            public List<Contact> Contacts { get; set; }
-            public List<Offer> Offers { get; set; }
-        }
-
-        public class History
-        {
-            public int Id { get; set; }
-            public int CompanyId { get; set; }
-            public string Name { get; set; }
-            public string Content { get; set; }
-            public DateTime Date { get; set; }
-        }
-
-        public class Contact
-        {
-            public int Id { get; set; }
-            public int CompanyId { get; set; }
-            public int CompanyBranchId { get; set; }
-            public string PhoneNumber { get; set; }
-            public string PhoneNumberAlt { get; set; }
-            public string EmailAddress { get; set; }
-            public string EmailAddressAlt { get; set; }
-            public bool IsActive { get; set; }
-        }
-
-        public class Offer
-        {
-            public int Id { get; set; }
-            public int CompanyId { get; set; }
-            public int CompanyBranchId { get; set; }
-            public int JobId { get; set; }
-            public int HeadHunterId { get; set; }
-            public int ApplicationId { get; set; }
-            public string SalaryOffered { get; set; }
-            public bool IsActive { get; set; }
-            public string ReleaseDate { get; set; }
-            public string JobOfferUrl { get; set; }
-        }
+        
     }

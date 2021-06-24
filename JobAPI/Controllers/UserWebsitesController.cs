@@ -32,7 +32,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("GetUserWebsite")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<UserWebsite>> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -46,7 +46,7 @@ namespace JobAPI.Controllers
                 return NotFound();
             }
 
-            return userWebsite;
+            return new JsonResult(userWebsite);
         }
 
 
@@ -60,8 +60,8 @@ namespace JobAPI.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.Created)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserWebsite>> Create([Bind("Id,UserId,Name,Content,Url")] UserWebsite userWebsite)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,UserId,Name,Content,Url")] UserWebsite userWebsite)
         {
             if (ModelState.IsValid)
             {
@@ -69,7 +69,7 @@ namespace JobAPI.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return userWebsite;
+            return new JsonResult(userWebsite);
         }
 
 
@@ -81,8 +81,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("EditUserWebsite")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserWebsite>> Edit(int id, [Bind("Id,UserId,Name,Content,Url")] UserWebsite userWebsite)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,Name,Content,Url")] UserWebsite userWebsite)
         {
             if (id != userWebsite.Id)
             {
@@ -107,9 +107,9 @@ namespace JobAPI.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return userWebsite;
+            return new JsonResult(userWebsite);
         }
 
 
@@ -120,8 +120,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("DeleteUserWebsite")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserWebsite>> DeleteConfirmed(int id)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var userWebsite = await _context.UserWebSitesDB.FindAsync(id);
             _context.UserWebSitesDB.Remove(userWebsite);

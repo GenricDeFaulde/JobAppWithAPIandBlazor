@@ -19,7 +19,7 @@ namespace JobAPI.Controllers
     public class UserJobHistoriesController : ControllerBase
     {
         private readonly JobDbContext _context;
-
+         
         public UserJobHistoriesController(JobDbContext context)
         {
             _context = context;
@@ -33,7 +33,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("GetUserJobHistories")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<UserJobHistory>> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -47,7 +47,7 @@ namespace JobAPI.Controllers
                 return NotFound();
             }
 
-            return userJobHistory;
+            return new JsonResult(userJobHistory);
         }
 
 
@@ -61,16 +61,16 @@ namespace JobAPI.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.Created)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserJobHistory>> Create([Bind("Id,UserId,Title,Description,SkillSummary,TestimonyUrl,Salary,StartDate,EndDate,Current")] UserJobHistory userJobHistory)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,UserId,Title,Description,SkillSummary,TestimonyUrl,Salary,StartDate,EndDate,Current")] UserJobHistory userJobHistory)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(userJobHistory);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return userJobHistory;
+            return new JsonResult(userJobHistory);
         }
 
 
@@ -83,8 +83,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("EditUserJobHistories")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserJobHistory>> Edit(int id, [Bind("Id,UserId,Title,Description,SkillSummary,TestimonyUrl,Salary,StartDate,EndDate,Current")] UserJobHistory userJobHistory)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,Title,Description,SkillSummary,TestimonyUrl,Salary,StartDate,EndDate,Current")] UserJobHistory userJobHistory)
         {
             if (id != userJobHistory.Id)
             {
@@ -109,9 +109,9 @@ namespace JobAPI.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return userJobHistory;
+            return new JsonResult(userJobHistory);
         }
 
 
@@ -122,8 +122,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("DeleteUserJobHistories")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserJobHistory>> DeleteConfirmed(int id)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var userJobHistory = await _context.UserPastJobs.FindAsync(id);
             _context.UserPastJobs.Remove(userJobHistory);

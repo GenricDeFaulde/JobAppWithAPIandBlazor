@@ -37,7 +37,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("GetAllCompanies")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<Company>> Details()
+        public async Task <IActionResult> Details()
         {
 
             var company = await _context.CompaniesDB
@@ -63,7 +63,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("GetCompanyById")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<Company>> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -82,7 +82,7 @@ namespace JobAPI.Controllers
                 return NotFound();
             }
 
-            
+
             return new JsonResult(company);
         }
 
@@ -91,22 +91,18 @@ namespace JobAPI.Controllers
         // POST: Companies/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("Create")]
         [SwaggerOperation("CreateCompany")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.Created)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<Company>> Create([Bind("Id,CompanyName,Current, Description")] Company company)
+//[ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> Create( Company company)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(company);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return company;
+            // TODO: implement
+            return Ok();
         }
 
 
@@ -115,13 +111,13 @@ namespace JobAPI.Controllers
         // PUT: Companies/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("Edit/{id}")]
         [SwaggerOperation("EditCompany")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<Company>> Edit(int id, [Bind("Id,CompanyName,Current, Description")] Company company)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyName,Current, Description")] Company company)
         {
             if (id != company.Id)
             {
@@ -135,6 +131,7 @@ namespace JobAPI.Controllers
                 {
                     _context.Update(company);
                     await _context.SaveChangesAsync();
+                    return Ok(new JsonResult(company));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -147,20 +144,19 @@ namespace JobAPI.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
-            return company;
+            return BadRequest();
         }
 
 
         // DELETE Companies/Delete/5
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("Delete/{id}")]
         [SwaggerOperation("DeleteCompany")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<Company>> DeleteConfirmed(int id)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var company = await _context.CompaniesDB.FindAsync(id);
             _context.CompaniesDB.Remove(company);

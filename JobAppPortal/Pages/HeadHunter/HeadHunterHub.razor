@@ -1,6 +1,4 @@
 ﻿@page "/HeadHunter"
-@inject NavigationManager NavManager
-@inject HttpClient Http
 
 
 
@@ -24,26 +22,5 @@
 
 
 @code {
-    public List<HeadHunter> headHunters;
-
-    private string errorMessage = null;
-
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            headHunters = await Http.GetFromJsonAsync<List<HeadHunter>>("https://localhost:44372/Api/HeadHunters/GetAll");
-        }
-        catch (Exception exception)
-        {
-            errorMessage = exception.ToString();
-        }
-
-    }
-
-    public class HeadHunter
-    {
-        public int Id { get; set; }
-
-    }
+    
 }

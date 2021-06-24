@@ -32,7 +32,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("GetApplicationHeader")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<ApplicationHeader>> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -46,7 +46,7 @@ namespace JobAPI.Controllers
                 return NotFound();
             }
 
-            return applicationHeader;
+            return new JsonResult(applicationHeader);
         }
 
 
@@ -60,16 +60,16 @@ namespace JobAPI.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.Created)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<ApplicationHeader>> Create([Bind("Id,ApplicationnId,Title,Content")] ApplicationHeader applicationHeader)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,ApplicationnId,Title,Content")] ApplicationHeader applicationHeader)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(applicationHeader);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return applicationHeader;
+            return new JsonResult(applicationHeader);
         }
 
 
@@ -82,8 +82,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("EditApplicationHeader")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<ApplicationHeader>> Edit(int id, [Bind("Id,ApplicationnId,Title,Content")] ApplicationHeader applicationHeader)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ApplicationnId,Title,Content")] ApplicationHeader applicationHeader)
         {
             if (id != applicationHeader.Id)
             {
@@ -108,9 +108,9 @@ namespace JobAPI.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return applicationHeader;
+            return new JsonResult(applicationHeader);
         }
 
 
@@ -122,8 +122,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("DeleteApplicationHeader")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<ApplicationHeader>> DeleteConfirmed(int id)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var applicationHeader = await _context.ApplicationHeadersDB.FindAsync(id);
             _context.ApplicationHeadersDB.Remove(applicationHeader);

@@ -32,7 +32,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("GetUserSkill")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<UserSkill>> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -46,7 +46,7 @@ namespace JobAPI.Controllers
                 return NotFound();
             }
 
-            return userSkill;
+            return new JsonResult(userSkill);
         }
 
 
@@ -60,16 +60,16 @@ namespace JobAPI.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.Created)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserSkill>> Create([Bind("Id,UserId,SkillName,SkillDescritpion,SelfRating,Current")] UserSkill userSkill)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,UserId,SkillName,SkillDescritpion,SelfRating,Current")] UserSkill userSkill)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(userSkill);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return userSkill;
+            return new JsonResult(userSkill);
         }
 
 
@@ -81,8 +81,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("EditUserSkill")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserSkill>> Edit(int id, [Bind("Id,UserId,SkillName,SkillDescritpion,SelfRating,Current")] UserSkill userSkill)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,SkillName,SkillDescritpion,SelfRating,Current")] UserSkill userSkill)
         {
             if (id != userSkill.Id)
             {
@@ -107,9 +107,9 @@ namespace JobAPI.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return userSkill;
+            return new JsonResult(userSkill);
         }
 
 
@@ -120,8 +120,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("DeleteUserSkill")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<UserSkill>> DeleteConfirmed(int id)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var userSkill = await _context.UserSkillsDB.FindAsync(id);
             _context.UserSkillsDB.Remove(userSkill);

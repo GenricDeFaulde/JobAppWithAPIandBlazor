@@ -34,7 +34,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("GetJobData")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<JobData>> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -48,7 +48,7 @@ namespace JobAPI.Controllers
                 return NotFound();
             }
 
-            return jobData;
+            return new JsonResult(jobData);
         }
 
 
@@ -63,16 +63,16 @@ namespace JobAPI.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.Created)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<JobData>> Create([Bind("Id,JobId,DescriptionShort,DescriptionLong,Nation,Region,MinSalary,MaxSalary,Current")] JobData jobData)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,JobId,DescriptionShort,DescriptionLong,Nation,Region,MinSalary,MaxSalary,Current")] JobData jobData)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(jobData);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return jobData;
+            return new JsonResult(jobData);
         }
 
 
@@ -86,8 +86,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("EditJobData")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<JobData>> Edit(int id, [Bind("Id,JobId,DescriptionShort,DescriptionLong,Nation,Region,MinSalary,MaxSalary,Current")] JobData jobData)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,JobId,DescriptionShort,DescriptionLong,Nation,Region,MinSalary,MaxSalary,Current")] JobData jobData)
         {
             if (id != jobData.Id)
             {
@@ -112,9 +112,9 @@ namespace JobAPI.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return jobData;
+            return new JsonResult(jobData);
         }
 
 
@@ -124,8 +124,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("DeleteJobData")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<JobData>> DeleteConfirmed(int id)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var jobData = await _context.JobDataDB.FindAsync(id);
             _context.JobDataDB.Remove(jobData);

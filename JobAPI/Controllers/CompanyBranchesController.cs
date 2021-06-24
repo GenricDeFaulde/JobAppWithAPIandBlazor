@@ -32,7 +32,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("GetAllCompanyBranches")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<List<CompanyBranch>>> Index()
+        public async Task<IActionResult> Index()
         {
 
             var companyBranch = await _context.CompanyBranchDB
@@ -55,7 +55,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("GetCompanyBranch")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<CompanyBranch>> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -70,7 +70,7 @@ namespace JobAPI.Controllers
                 return NotFound();
             }
 
-            return companyBranch;
+            return new JsonResult(companyBranch);
         }
 
         // GET: CompanyBranches/GetAllBranchesForCompanyById/5
@@ -79,7 +79,7 @@ namespace JobAPI.Controllers
         [SwaggerOperation("GetyBranchesForCompany")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        public async Task<ActionResult<CompanyBranch>> GetAllForCompanyById(int? id)
+        public async Task<IActionResult> GetAllForCompanyById(int? id)
         {
             if (id == null)
             {
@@ -110,8 +110,8 @@ namespace JobAPI.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
         [SwaggerResponse((int)HttpStatusCode.Created)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<CompanyBranch>> Create([Bind("CompanyId,Name,Description,AddressNation,AddressCity,AddressStreet,AddressState")] CompanyBranch companyBranch)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("CompanyId,Name,Description,AddressNation,AddressCity,AddressStreet,AddressState")] CompanyBranch companyBranch)
         {
             if (ModelState.IsValid)
             {
@@ -126,7 +126,7 @@ namespace JobAPI.Controllers
                     id = companyBranch.CompanyId
                 });
             }
-            return companyBranch;
+            return new JsonResult(companyBranch);
         }
 
 
@@ -138,8 +138,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("EditCompanyBranch")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<CompanyBranch>> Edit(int id, [Bind("Id, CompanyId,Name,Description,AddressNation,AddressCity,AddressStreet,AddressState")] CompanyBranch companyBranch)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id, CompanyId,Name,Description,AddressNation,AddressCity,AddressStreet,AddressState")] CompanyBranch companyBranch)
         {
             companyBranch.CompanyId = id;
 
@@ -161,9 +161,9 @@ namespace JobAPI.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index), new { id = companyBranch.Id });
+                return Ok();
             }
-            return companyBranch;
+            return new JsonResult(companyBranch);
         }
 
 
@@ -173,8 +173,8 @@ namespace JobAPI.Controllers
         [SwaggerOperation("DeleteCompanyBranch")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.NotFound)]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<CompanyBranch>> DeleteConfirmed(int id)
+//[ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var companyBranch = await _context.CompanyBranchDB.FindAsync(id);
             _context.CompanyBranchDB.Remove(companyBranch);

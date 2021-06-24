@@ -182,13 +182,11 @@ namespace JobAPI.Data
             modelBuilder.Entity<global::JobAPI.Models.ApplicationModel.Application>()
                         .HasOne(x => x.Body)
                         .WithMany(b => b.Applications)
-                        //.HasForeignKey<global::JobAPI.Models.ApplicationModel.ApplicationBody>("Application.Body_Id")
                         .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<global::JobAPI.Models.ApplicationModel.Application>()
                         .HasOne(x => x.Footer)
                         .WithMany(b => b.Applications)
-                        //.HasForeignKey<global::JobAPI.Models.ApplicationModel.ApplicationFooter>("Application.Footer_Id")
                         .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<global::JobAPI.Models.ApplicationModel.ApplicationBody>()
@@ -281,13 +279,11 @@ namespace JobAPI.Data
             modelBuilder.Entity<global::JobAPI.Models.CompanyModel.Company>()
                         .HasMany(x => x.Branches)
                         .WithOne(u => u.Company)
-                        //.HasForeignKey("Company.Branches_Id")
 
                         .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<global::JobAPI.Models.CompanyModel.Company>()
                         .HasMany(x => x.HistoryList)
                         .WithOne(u => u.Company)
-                        //.HasForeignKey("Company.HistoryList_Id")
                         .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<global::JobAPI.Models.CompanyModel.CompanyBranch>()
@@ -326,7 +322,6 @@ namespace JobAPI.Data
             modelBuilder.Entity<global::JobAPI.Models.CompanyModel.CompanyBranch>()
                         .HasMany(x => x.Contacts)
                         .WithOne(u => u.CompanyBranch)
-                        //.HasForeignKey("CompanyBranch.Contacts_Id")
                         .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<global::JobAPI.Models.CompanyModel.CompanyContactData>()
@@ -411,7 +406,6 @@ namespace JobAPI.Data
             modelBuilder.Entity<global::JobAPI.Models.HeadHunterModel.HeadHunter>()
                         .HasMany(x => x.ContactInfos)
                         .WithOne(u => u.Hunter)
-                        //.HasForeignKey("HeadHunter.Name_Id")
                         .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<global::JobAPI.Models.HeadHunterModel.HeadHunterContactData>()
@@ -448,7 +442,6 @@ namespace JobAPI.Data
             modelBuilder.Entity<global::JobAPI.Models.HeadHunterModel.HeadHunterContactData>()
                         .HasOne(u => u.Hunter)
                         .WithMany(x => x.ContactInfos)
-                        //.HasForeignKey("HeadHunter.Name_Id")
                         .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<global::JobAPI.Models.JobModel.Job>()
@@ -471,7 +464,6 @@ namespace JobAPI.Data
             modelBuilder.Entity<global::JobAPI.Models.JobModel.Job>()
                         .HasMany(x => x.JobData)
                         .WithOne(u => u.Job)
-                        //.HasForeignKey("Job.JobData_Id")
                         .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<global::JobAPI.Models.JobModel.Job>()
@@ -518,7 +510,6 @@ namespace JobAPI.Data
             modelBuilder.Entity<global::JobAPI.Models.JobModel.JobData>()
                         .HasOne(u => u.Job)
                         .WithMany(x => x.JobData)
-                        //.HasForeignKey("Job.JobData_Id")
                         .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<global::JobAPI.Models.JobModel.JobExchange>()
@@ -561,37 +552,31 @@ namespace JobAPI.Data
             modelBuilder.Entity<global::JobAPI.Models.JobModel.JobOffer>()
                         .HasOne(x => x.Application)
                         .WithOne()
-                        //.HasForeignKey<global::JobAPI.Models.ApplicationModel.Application>("JobOffer.Application_Id")
 
                         .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<global::JobAPI.Models.JobModel.JobOffer>()
                         .HasOne(x => x.Jobsuche)
                         .WithOne()
-                        //.HasForeignKey<global::JobAPI.Models.ALVModel.Jobsuche>("JobOffer.Jobsuche_Id")
 
                         .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<global::JobAPI.Models.JobModel.JobOffer>()
                         .HasOne(x => x.Job)
                         .WithMany(u => u.Offers)
-                        //.HasForeignKey<global::JobAPI.Models.JobModel.Job>("JobOffer.Job_Id")
 
                         .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<global::JobAPI.Models.JobModel.JobOffer>()
                         .HasOne(x => x.JobExchange)
                         .WithMany(u => u.Offers)
-                        //.HasForeignKey<global::JobAPI.Models.JobModel.JobExchange>("JobOffer.JobExchange_Id")
 
                         .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<global::JobAPI.Models.JobModel.JobOffer>()
                         .HasOne(x => x.CompanyBranch)
                         .WithMany(u => u.Offers)
-                        //.HasForeignKey<global::JobAPI.Models.CompanyModel.Company>("JobOffer.Company_Id")
 
                         .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<global::JobAPI.Models.JobModel.JobOffer>()
                         .HasOne(x => x.HeadHunter)
                         .WithMany(u => u.Offers)
-                        //.HasForeignKey<global::JobAPI.Models.HeadHunterModel.HeadHunter>("JobOffer.HeadHunter_Id")
 
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -689,43 +674,36 @@ namespace JobAPI.Data
             modelBuilder.Entity<global::JobAPI.Models.UserModel.User>()
                         .HasOne(x => x.ContactData)
                         .WithOne(u => u.User)
-                        //.HasForeignKey<global::JobAPI.Models.UserModel.UserContactData>("User.ContactData_Id")
 
                         .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<global::JobAPI.Models.UserModel.User>()
                         .HasMany(x => x.EducationHistory)
                         .WithOne(u => u.User)
-                        //.HasForeignKey("User.EducationHistory_Id")
 
                         .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<global::JobAPI.Models.UserModel.User>()
                         .HasMany(x => x.JobHistory)
                         .WithOne(u => u.User)
-                        //.HasForeignKey("User.JobHistory_Id")
 
                         .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<global::JobAPI.Models.UserModel.User>()
                         .HasMany(x => x.Skills)
                         .WithOne(u => u.User)
-                        //.HasForeignKey("User.Skills_Id")
 
                         .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<global::JobAPI.Models.UserModel.User>()
                         .HasMany(x => x.Websites)
                         .WithOne(u => u.User)
-                        //.HasForeignKey("User.Websites_Id")
 
                         .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<global::JobAPI.Models.UserModel.User>()
                         .HasMany(x => x.Applications)
                         .WithOne(u => u.User)
-                        //.HasForeignKey("User.Applications_Id")
 
                         .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<global::JobAPI.Models.UserModel.User>()
                         .HasMany(x => x.JobsGesucht)
                         .WithOne(u => u.User)
-                        //.HasForeignKey("User.JobsGesucht_Id")
 
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -775,7 +753,6 @@ namespace JobAPI.Data
             modelBuilder.Entity<global::JobAPI.Models.UserModel.UserContactData>()
                         .HasOne(u => u.User)
                         .WithOne(x => x.ContactData)
-                        //.HasForeignKey("User.Applications_Id")
 
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -830,7 +807,6 @@ namespace JobAPI.Data
             modelBuilder.Entity<global::JobAPI.Models.UserModel.UserEducation>()
                         .HasOne(u => u.User)
                         .WithMany(x => x.EducationHistory)
-                        //.HasForeignKey("User.Applications_Id")
 
                         .OnDelete(DeleteBehavior.Restrict);
 

@@ -1,16 +1,43 @@
 ﻿@page "/User"
-@inject NavigationManager NavManager
 
 
 
 <AuthorizeView>
     <Authorized>
-        <h1>Hello,@context.User.FindFirst(ClaimTypes.Name).Value.</h1>
-        <h2>User Hub</h2>
-        <p>This will be the central hub for the User to manage his Data.</p>
+        @if (errorMessage is not null)
+        {
+            <h1>@errorMessage</h1>
+        }
+
+        @if (user is not null)
+        {
+
+            <GenericList Elements="userList">
+                <LoadMessage>I got a bad feeling about this...</LoadMessage>
+                <EmptyTemplate>
+                    <text>Nothing here</text>
+                </EmptyTemplate>
+                <WithElementsTemplate>
+                    <h1>User Hub</h1>
+
+
+                    <EditForm Model="user" Context="NewProfile" OnValidSubmit="@SaveUser">
+                        <DataAnnotationsValidator />
+
+                        <DynamicForm @bind-Model="user">
+                        </DynamicForm>
+                        <div class="row">
+                            <button class="btn btn-success p-0 m-0 mt-2" type="Submit">Save User</button>
+                        </div>
+                        <ValidationSummary></ValidationSummary>
+                    </EditForm>
+
+
+                </WithElementsTemplate>
+            </GenericList>
+        }
     </Authorized>
     <NotAuthorized>
-        <h1>Hello, world!</h1>
         Please <a href="login">Log In</a> to use this service.
     </NotAuthorized>
 </AuthorizeView>
@@ -18,5 +45,5 @@
 
 
 @code {
-
+    
 }

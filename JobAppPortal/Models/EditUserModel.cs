@@ -16,7 +16,6 @@ namespace JobAppPortal.Models
         /// Identity, Required
         /// </summary>
         [Key]
-        [Required]
         public int Id { get; set; }
 
         /// <summary>
@@ -31,7 +30,7 @@ namespace JobAppPortal.Models
         /// <summary>
         /// Required, Min length = 3, Max length = 30
         /// </summary>
-        [Required]
+        //[Required]
         [MinLength(3)]
         [MaxLength(30)]
         [StringLength(30)]
@@ -43,7 +42,7 @@ namespace JobAppPortal.Models
         /// <summary>
         /// Required, Max length = 50
         /// </summary>
-        [Required]
+        //[Required]
         [MaxLength(50)]
         [StringLength(50)]
         [DataType(DataType.Text)]
@@ -63,7 +62,7 @@ namespace JobAppPortal.Models
         /// <summary>
         /// Required, Max length = 20
         /// </summary>
-        [Required]
+        //[Required]
         [MaxLength(20)]
         [StringLength(20)]
         [DataType(DataType.Text)]
@@ -114,7 +113,7 @@ namespace JobAppPortal.Models
         /// <summary>
         /// Required, Max length = 50     Nationality
         /// </summary>
-        [Required]
+        //[Required]
         [MaxLength(50)]
         [StringLength(50)]
         [DataType(DataType.Text)]
@@ -156,6 +155,78 @@ namespace JobAppPortal.Models
         [Required]
         [Display(Name = "is user moderator")]
         public bool IsModerator { get; set; }
+
+        //TODO: cleanup
+
+        //// ContactData
+
+        ///// <summary>
+        ///// Required, Max length = 50    Address:Nation
+        ///// </summary>
+        ////[Required]
+        //[MaxLength(50)]
+        //[StringLength(50)]
+        //[DataType(DataType.Text)]
+        //[Display(Name = "Nation")]
+        //public string AddressNation { get; set; }
+
+        ///// <summary>
+        ///// Required, Max length = 50    Address:City
+        ///// </summary>
+        ////[Required]
+        //[MaxLength(50)]
+        //[StringLength(50)]
+        //[DataType(DataType.Text)]
+        //[Display(Name = "City")]
+        //public string AddressCity { get; set; }
+
+        ///// <summary>
+        ///// Required, Max length = 50    Address:Street
+        ///// </summary>
+        ////[Required]
+        //[MaxLength(50)]
+        //[StringLength(50)]
+        //[DataType(DataType.Text)]
+        //[Display(Name = "Street")]
+        //public string AddressStreet { get; set; }
+
+        ///// <summary>
+        ///// Required, Max length = 50    Address:State
+        ///// </summary>
+        ////[Required]
+        //[MaxLength(50)]
+        //[StringLength(50)]
+        //[DataType(DataType.Text)]
+        //[Display(Name = "State")]
+        //public string AddressState { get; set; }
+
+        ///// <summary>
+        ///// Required, Max length = 50    Address:PhoneNumber
+        ///// </summary>
+        ////[Required]
+        //[MaxLength(50)]
+        //[StringLength(50)]
+        //[DataType(DataType.Text)]
+        //[Display(Name = "PhoneNumber")]
+        //public string PhoneNumber { get; set; }
+
+        ///// <summary>
+        ///// Required, Max length = 50    Address:PhoneNumber alt
+        ///// </summary>
+        ////[Required]
+        //[MaxLength(50)]
+        //[StringLength(50)]
+        //[DataType(DataType.Text)]
+        //[Display(Name = "alternative PhoneNumber")]
+        //public string PhoneNumberAlt { get; set; }
+
+        ///// <summary>
+        ///// Required, bool
+        ///// </summary>
+        ////[Required]
+        //[Display(Name = "Status")]
+        //public Boolean Current { get; set; }
+
 
         /*************************************************************************
          * Navigation properties
